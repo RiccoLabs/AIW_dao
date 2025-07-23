@@ -134,7 +134,7 @@ export function AppContents(props: Props) {
   const { vsrClient } = useVsrClient()
 
   const realmName = realmInfo?.displayName ?? realm?.account?.name
-  const title = realmName ? `${realmName}` : 'Realms'
+  const title = realmName ? `${realmName}` : 'AIW DAO'
 
   // Note: ?v==${Date.now()} is added to the url to force favicon refresh.
   // Without it browsers would cache the last used and won't change it for different realms
@@ -235,13 +235,14 @@ export function AppContents(props: Props) {
   }, [cluster, updateSerumGovAccounts])
 
   return (
-    <div className="relative bg-bkg-1 text-fgd-1">
+    <div className="relative bg-gray-900 text-fgd-1 min-h-screen">
       <Head>
         <meta property="og:title" content={title} key="title" />
         <title>{title}</title>
         <style>{`
           body {
-            background-color: #17161c;
+            background-color: rgb(17 24 39);
+            min-height: 100vh;
           }
         `}</style>
         {faviconUrl && faviconExists ? (
@@ -326,17 +327,6 @@ export function AppContents(props: Props) {
       <ErrorBoundary>
         <ThemeProvider defaultTheme="Dark">
           <GatewayProvider>
-            <div className="relative color-white z-10 text-center w-full py-2">
-              Faster. Sharper. More. Yours.{' '}
-              <a
-                href="https://v2.realms.today"
-                rel="noreferrer"
-                target="_blank"
-                className="underline"
-              >
-                Try Realms v2
-              </a>
-            </div>
             <Telemetry></Telemetry>
             <NavBar />
             <Notifications />

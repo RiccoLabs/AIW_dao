@@ -1,105 +1,200 @@
+import React, { useEffect, useState } from 'react'
 import Link from 'next/link'
 import cx from 'classnames'
-import { ExternalLinkIcon } from '@heroicons/react/outline'
+import { useTheme } from 'next-themes'
+import { FiTwitter, FiYoutube, FiMessageCircle } from 'react-icons/fi'
 
-import SocialIcons from '@components/SocialIcons'
-import { useEffect, useState } from 'react'
+const Footer: React.FC = () => {
+  const { theme } = useTheme()
+  const [mounted, setMounted] = useState(false)
+  
+  useEffect(() => setMounted(true), [])
+  
+  // Handle hydration and theme detection
+  const isDark = mounted && (theme === 'Dark' || theme === 'dark')
+  
+  // Debug: Log the current theme
 
-const Footer = () => {
-  const { REALM } = process.env
-  const [usingRealmFromProcessEnv, setUsingRealmFromProcessEnv] =
-    useState(false)
-
-  useEffect(() => {
-    setUsingRealmFromProcessEnv(!!REALM)
-  }, [REALM])
-
-  if (usingRealmFromProcessEnv) {
-    return null
-  }
+  const footerLinks = [
+    {
+      title: 'Explorer',
+      links: ['Official Portfolio', 'Public Equities', 'Start-up'],
+    },
+    {
+      title: 'Collection',
+      links: ['AIW Collection', 'Relate Collection'],
+    },
+    {
+      title: 'Program',
+      links: ['Pool', 'DAO', 'GrowthLab'],
+    },
+    {
+      title: 'Pulse',
+      links: ['Notice', 'SNS', 'Feed', 'Book Mark'],
+    },
+    {
+      title: 'InSight',
+      links: ['Company InSight', 'Investment Report'],
+    },
+  ]
 
   return (
-    <div
+    <footer
       className={cx(
-        'absolute',
-        'bottom-0',
-        'left-0',
-        'flex',
-        'flex-row',
-        'items-center',
-        'justify-around',
-        'w-full',
-        'h-20',
-        'pb-0',
-        'lg:pb-24',
-        'gap-y-8',
-        'md:gap-y-0',
-        'z-[1]',
+        'pt-12 pb-8',
+        isDark
+          ? 'bg-[rgb(17,24,39)] border-t border-dark-theme-bkg-3'
+          : 'bg-white border-t border-light-theme-bkg-3',
       )}
+      style={isDark ? { backgroundColor: 'rgb(17, 24, 39)' } : { backgroundColor: 'white' }}
     >
-      <div
-        className={cx(
-          'absolute',
-          'flex-col',
-          'flex',
-          'gap-1',
-          'sm:gap-2',
-          'items-center',
-          'justify-center',
-          'left-1/2',
-          'pb-4',
-          'top-1/2',
-          '-translate-x-1/2',
-          'translate-y-[20px]',
-          'lg:relative',
-          'lg:pb-0',
-          'lg:translate-x-0',
-          'lg:translate-y-0',
-          'lg:left-0',
-          'lg:top-0',
-          'w-fit',
-        )}
-      >
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8">
+          <div className="col-span-2">
+            <div className="flex items-center mb-4">
+              <img
+                src="https://i.ibb.co/Z6yCq9Hx/W1-1.png"
+                alt="AIW Logo"
+                className={cx('h-8 w-auto', isDark ? 'filter invert' : '')}
+              />
+            </div>
+            <p
+              className={cx(
+                'mb-6 max-w-xs',
+                isDark ? 'text-dark-theme-fgd-3' : 'text-light-theme-fgd-2',
+              )}
+            >
+              A cutting-edge DeFi platform revolutionizing decentralized finance
+              with innovative blockchain solutions.
+            </p>
+            <div className="flex space-x-4">
+              <a
+                href="https://twitter.com/AIWDAO"
+                target="_blank"
+                rel="noreferrer"
+                className={cx(
+                  'transition-colors',
+                  isDark
+                    ? 'text-dark-theme-fgd-3 hover:text-dark-theme-blue'
+                    : 'text-light-theme-fgd-2 hover:text-light-theme-blue',
+                )}
+              >
+                <FiTwitter className="h-5 w-5" />
+              </a>
+              <a
+                href="#"
+                className={cx(
+                  'transition-colors',
+                  isDark
+                    ? 'text-dark-theme-fgd-3 hover:text-dark-theme-blue'
+                    : 'text-light-theme-fgd-2 hover:text-light-theme-blue',
+                )}
+              >
+                <FiYoutube className="h-5 w-5" />
+              </a>
+              <a
+                href="#"
+                className={cx(
+                  'transition-colors',
+                  isDark
+                    ? 'text-dark-theme-fgd-3 hover:text-dark-theme-blue'
+                    : 'text-light-theme-fgd-2 hover:text-light-theme-blue',
+                )}
+              >
+                <FiMessageCircle className="h-5 w-5" />
+              </a>
+            </div>
+          </div>
+
+          {footerLinks.map((section, index) => (
+            <div key={index}>
+              <h3
+                className={cx(
+                  'font-medium mb-4',
+                  isDark ? 'text-dark-theme-fgd-1' : 'text-light-theme-fgd-1',
+                )}
+              >
+                {section.title}
+              </h3>
+              <ul className="space-y-2">
+                {section.links.map((link, linkIndex) => (
+                  <li key={linkIndex}>
+                    <a
+                      href="#"
+                      className={cx(
+                        'text-sm transition-colors',
+                        isDark
+                          ? 'text-dark-theme-fgd-3 hover:text-dark-theme-blue'
+                          : 'text-light-theme-fgd-2 hover:text-light-theme-blue',
+                      )}
+                    >
+                      {link}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+
         <div
-          className={cx('flex', 'flex-col', 'items-center', 'justify-center')}
+          className={cx(
+            'mt-12 pt-8',
+            isDark
+              ? 'border-t border-dark-theme-bkg-3'
+              : 'border-t border-light-theme-bkg-3',
+          )}
         >
-          <SocialIcons className="mb-5" />
-          <div className="flex flex-col justify-center sm:space-x-2 text-center text-sm opacity-70 sm:flex-row sm:text-sm sm:text-left">
-            <div className="flex-shrink-0">© 2025 Realms Today Ltd</div>
-            <span className="hidden sm:block mx-2">|</span>
-            <Link href="https://realms.today/terms" passHref>
-              <a className="flex-shrink-0 whitespace-nowrap">Terms</a>
-            </Link>
-            <span className="hidden sm:block mx-2">|</span>
-            <Link href="https://realms.today/privacy-policy" passHref>
-              <a className="flex-shrink-0 whitespace-nowrap">Privacy Policy</a>
-            </Link>
+          <div className="flex flex-col md:flex-row justify-between items-center">
+            <p
+              className={cx(
+                'text-sm',
+                isDark ? 'text-dark-theme-fgd-3' : 'text-light-theme-fgd-2',
+              )}
+            >
+              © 2025 RiccoLabs. All rights reserved.
+            </p>
+            <div className="flex space-x-6 mt-4 md:mt-0">
+              <Link href="/privacy-policy" passHref>
+                <a
+                  className={cx(
+                    'text-sm transition-colors',
+                    isDark
+                      ? 'text-dark-theme-fgd-3 hover:text-dark-theme-blue'
+                      : 'text-light-theme-fgd-2 hover:text-light-theme-blue',
+                  )}
+                >
+                  Privacy Policy
+                </a>
+              </Link>
+              <Link href="/terms" passHref>
+                <a
+                  className={cx(
+                    'text-sm transition-colors',
+                    isDark
+                      ? 'text-dark-theme-fgd-3 hover:text-dark-theme-blue'
+                      : 'text-light-theme-fgd-2 hover:text-light-theme-blue',
+                  )}
+                >
+                  Terms of Service
+                </a>
+              </Link>
+              <a
+                href="#"
+                className={cx(
+                  'text-sm transition-colors',
+                  isDark
+                    ? 'text-dark-theme-fgd-3 hover:text-dark-theme-blue'
+                    : 'text-light-theme-fgd-2 hover:text-light-theme-blue',
+                )}
+              >
+                Cookie Policy
+              </a>
+            </div>
           </div>
         </div>
-
-        <a
-          className={cx(
-            'flex',
-            'items-center',
-            'group',
-            'opacity-70',
-            'active:opacity-50',
-            'focus:opacity-[.80]',
-            'hover:opacity-[.80]',
-            'mr-2',
-            'text-sm',
-          )}
-          href="https://docs.realms.today/"
-        >
-          <ExternalLinkIcon className="w-4 h-4 mr-2 stroke-current" />
-          <div>Read the Docs</div>
-        </a>
-
-        <div className="opacity-70">
-          Powered by <span className="font-bold">Solana</span>
-        </div>
       </div>
-    </div>
+    </footer>
   )
 }
 
