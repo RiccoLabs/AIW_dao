@@ -41,6 +41,16 @@ import { useVsrClient } from '../VoterWeightPlugins/useVsrClient'
 import { useRealmVoterWeightPlugins } from '@hooks/useRealmVoterWeightPlugins'
 import TermsPopupModal from './TermsPopup'
 import PlausibleProvider from 'next-plausible'
+import AIWGovernanceHeader from './AIWGovernanceHeader'
+import { useLegacyVoterWeight } from '@hooks/queries/governancePower'
+import { useMintInfoByPubkeyQuery } from '@hooks/queries/mintInfo'
+import {
+  getAssociatedTokenAddressSync,
+  TOKEN_2022_PROGRAM_ID,
+} from '@solana/spl-token-new'
+import { useTokenAccountByKeyQuery } from 'TokenVoterPlugin/hooks/useTokenAccount'
+import { PublicKey } from '@solana/web3.js'
+import { BigNumber } from 'bignumber.js'
 
 const Notifications = dynamic(() => import('../components/Notification'), {
   ssr: false,
@@ -125,6 +135,53 @@ export function AppContents(props: Props) {
   const { realmInfo } = useRealm()
   const wallet = useWalletOnePointOh()
   const connection = useLegacyConnectionContext()
+
+  // Calculate governance power for AIW DAO using the same method as "My governance power" section
+  const { result: voterWeight, ready } = useLegacyVoterWeight()
+
+  // Get plugin mint key (same as TokenVoterPlugin)
+  const { plugins: communityPlugins } = useRealmVoterWeightPlugins('community')
+  const pluginParams = communityPlugins?.voterWeight[0]?.params as any
+  const pluginMintKey = pluginParams?.votingMintConfigs?.[0]?.mint ?? undefined
+
+  const mintInfo = useMintInfoByPubkeyQuery(pluginMintKey).data?.result
+
+  const ataKey = getAssociatedTokenAddressSync(
+    pluginMintKey ?? PublicKey.default,
+    wallet?.publicKey ?? PublicKey.default,
+    undefined,
+    TOKEN_2022_PROGRAM_ID,
+  )
+  const userPluginAta = useTokenAccountByKeyQuery(ataKey).data
+
+  const governancePower = useMemo(() => {
+    if (ready && voterWeight && mintInfo) {
+      // Get the community governance power from the voter weight
+      const communityPower = (voterWeight as any).voterWeights?.community
+
+      if (communityPower) {
+        // Format the value using mint decimals (same as VanillaVotingPower)
+        const formattedValue = new BigNumber(communityPower.toString())
+          .shiftedBy(-mintInfo.decimals)
+          .toNumber()
+        return formattedValue
+      }
+    }
+    return 0
+  }, [voterWeight, ready, mintInfo])
+
+  const availableTokens = useMemo(() => {
+    // Only calculate if wallet is connected and data is available
+    if (wallet?.connected && mintInfo && userPluginAta?.amount) {
+      const tokens = new BigNumber(userPluginAta.amount.toString())
+        .shiftedBy(-mintInfo.decimals)
+        .toNumber()
+      return tokens
+    }
+
+    // Return 0 if wallet not connected or data not ready
+    return 0
+  }, [mintInfo, userPluginAta, wallet?.connected])
 
   const router = useRouter()
   const { cluster } = router.query
@@ -329,6 +386,12 @@ export function AppContents(props: Props) {
           <GatewayProvider>
             <Telemetry></Telemetry>
             <NavBar />
+            {realm && (
+              <AIWGovernanceHeader
+                governancePower={governancePower}
+                availableTokens={availableTokens}
+              />
+            )}
             <Notifications />
             <TransactionLoader></TransactionLoader>
             <NftVotingCountingModal />

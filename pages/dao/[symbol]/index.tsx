@@ -453,7 +453,7 @@ const REALM = () => {
                 />
                 {activeTab === 'Proposals' && (
                   <>
-                    <div className="pb-3 bg-gray-800 rounded-lg p-4">
+                    <div className="pb-3 rounded-lg p-4">
                       <div className="flex items-center pb-4 space-x-3">
                         <Input
                           className="pl-8 w-full"
@@ -501,7 +501,7 @@ const REALM = () => {
                         </div>
                       </div>
                     </div>
-                    <div className="space-y-3 bg-gray-800 rounded-lg p-4 mt-4">
+                    <div className="space-y-3 rounded-lg p-4 mt-4">
                       {filteredProposals.length > 0 ? (
                         <>
                           {paginatedProposals.map(([k, v]) =>
