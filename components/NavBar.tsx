@@ -1,3 +1,4 @@
+
 import useQueryContext from '@hooks/useQueryContext'
 import Link from 'next/link'
 import dynamic from 'next/dynamic'
@@ -26,6 +27,7 @@ import {
   GiftIcon,
 } from '@heroicons/react/outline'
 import { MenuIcon, XIcon } from '@heroicons/react/solid'
+import { routes } from '../env'
 
 const ConnectWalletButtonDynamic = dynamic(
   async () => await import('./ConnectWalletButton'),
@@ -60,17 +62,17 @@ const NavBar = () => {
       items: [
         {
           name: 'Official Portfolio',
-          path: '/official-portfolio',
+          path: routes[0],
           icon: <GlobeAltIcon className="h-3 w-3" />,
         },
         {
           name: 'Public Equities',
-          path: '/public-equities',
+          path: routes[1],
           icon: <ChartBarIcon className="h-3 w-3" />,
         },
         {
           name: 'Start-up',
-          path: '/startup',
+          path: routes[2],
           icon: <GlobeAltIcon className="h-3 w-3" />,
         },
       ],
@@ -80,12 +82,12 @@ const NavBar = () => {
       items: [
         {
           name: 'AIW Collection',
-          path: '/aiw-collection',
+          path: routes[3],
           icon: <ViewBoardsIcon className="h-3 w-3" />,
         },
         {
           name: 'Relate Collection',
-          path: '/relate-collection',
+          path: routes[4],
           icon: <ViewBoardsIcon className="h-3 w-3" />,
         },
       ],
@@ -95,17 +97,17 @@ const NavBar = () => {
       items: [
         {
           name: 'Pool',
-          path: '/pool',
+          path: routes[5],
           icon: <BeakerIcon className="h-3 w-3" />,
         },
         {
           name: 'DAO',
-          path: '/dao',
+          path: routes[6],
           icon: <GlobeAltIcon className="h-3 w-3" />,
         },
         {
           name: 'GrowthLab',
-          path: '/growth-lab',
+          path: routes[7],
           icon: <DocumentTextIcon className="h-3 w-3" />,
         },
       ],
@@ -115,18 +117,22 @@ const NavBar = () => {
       items: [
         {
           name: 'Notice',
-          path: '/notice',
+          path: routes[8],
           icon: <BellIcon className="h-3 w-3" />,
         },
         {
           name: 'SNS',
-          path: '/sns',
+          path: routes[9],
           icon: <GlobeAltIcon className="h-3 w-3" />,
         },
-        { name: 'Feed', path: '/feed', icon: <RssIcon className="h-3 w-3" /> },
+        {
+          name: 'Feed',
+          path: routes[10],
+          icon: <RssIcon className="h-3 w-3" />,
+        },
         {
           name: 'Bookmark',
-          path: '/bookmark',
+          path: routes[11],
           icon: <BookmarkIcon className="h-3 w-3" />,
         },
       ],
@@ -136,37 +142,37 @@ const NavBar = () => {
       items: [
         {
           name: 'Company InSight',
-          path: '/company-insight',
+          path: routes[12],
           icon: <GlobeAltIcon className="h-3 w-3" />,
         },
         {
           name: 'Investment Report',
-          path: '/investment-report',
+          path: routes[13],
           icon: <DocumentReportIcon className="h-3 w-3" />,
         },
         {
           name: 'Premium InSight',
-          path: '/premium-insight',
+          path: routes[14],
           icon: <StarIcon className="h-3 w-3" />,
           subItems: [
             {
               name: 'Market Trends',
-              path: '/premium/market-trends',
+              path: routes[15],
               icon: <TrendingUpIcon className="h-3 w-3" />,
             },
             {
               name: 'Top Performing Portfolios',
-              path: '/premium/top-portfolios',
+              path: routes[16],
               icon: <StarIcon className="h-3 w-3" />,
             },
             {
               name: 'DAO Voting Analytics',
-              path: '/premium/dao-analytics',
+              path: routes[17],
               icon: <ChartBarIcon className="h-3 w-3" />,
             },
             {
               name: 'Market Trends',
-              path: '/premium/market-trends-2',
+              path: routes[18],
               icon: <TrendingDownIcon className="h-3 w-3" />,
             },
           ],
@@ -178,47 +184,47 @@ const NavBar = () => {
       items: [
         {
           name: 'Setting',
-          path: '/setting',
+          path: routes[19],
           icon: <CogIcon className="h-3 w-3" />,
         },
         {
           name: 'Bridge',
-          path: '/bridge',
+          path: routes[20],
           icon: <ShareIcon className="h-3 w-3" />,
         },
         {
           name: 'Loan',
-          path: '/loan',
+          path: routes[21],
           icon: <CurrencyDollarIcon className="h-3 w-3" />,
         },
         {
           name: 'Event',
-          path: '/event',
+          path: routes[22],
           icon: <CalendarIcon className="h-3 w-3" />,
         },
         {
           name: 'Tools',
-          path: '/tools',
+          path: routes[23],
           icon: <CogIcon className="h-3 w-3" />,
           subItems: [
             {
               name: 'Wallet Check',
-              path: '/tools/wallet-check',
+              path: routes[24],
               icon: <GlobeAltIcon className="h-3 w-3" />,
             },
             {
               name: 'Token Burn',
-              path: '/tools/token-burn',
+              path: routes[25],
               icon: <FireIcon className="h-3 w-3" />,
             },
             {
               name: 'Token Lock',
-              path: '/tools/token-lock',
+              path: routes[26],
               icon: <LockClosedIcon className="h-3 w-3" />,
             },
             {
               name: 'Token Airdrop',
-              path: '/tools/token-airdrop',
+              path: routes[27],
               icon: <GiftIcon className="h-3 w-3" />,
             },
           ],

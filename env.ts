@@ -1,0 +1,34 @@
+
+// Route configuration
+const BASE_PATH = process.env.NEXT_PUBLIC_BASE_PATH || ''
+
+export const routes = [
+    `${BASE_PATH}/`,
+    `${BASE_PATH}/public-equities`,
+    `${BASE_PATH}/startup`,
+    `${BASE_PATH}/aiw-collection`,
+    `${BASE_PATH}/relate-collection`,
+    `${BASE_PATH}/pool`,
+    `${BASE_PATH}/dao`,
+    `${BASE_PATH}/growth-lab`,
+    `${BASE_PATH}/notice`,
+    `${BASE_PATH}/sns`,
+    `${BASE_PATH}/feed`,
+    `${BASE_PATH}/bookmark`,
+    `${BASE_PATH}/company-insight`,
+    `${BASE_PATH}/investment-report`,
+    `${BASE_PATH}/premium-insight`,
+    `${BASE_PATH}/premium/market-trends`,
+    `${BASE_PATH}/premium/top-portfolios`,
+    `${BASE_PATH}/premium/dao-analytics`,
+    `${BASE_PATH}/premium/market-trends-2`,
+    `${BASE_PATH}/setting`,
+    `${BASE_PATH}/bridge`,
+    `${BASE_PATH}/loan`,
+    `${BASE_PATH}/event`,
+    `${BASE_PATH}/tools`,
+    `${BASE_PATH}/tools/wallet-check`,
+    `${BASE_PATH}/tools/token-burn`,
+    `${BASE_PATH}/tools/token-lock`,
+    `${BASE_PATH}/tools/token-airdrop`,
+] 
