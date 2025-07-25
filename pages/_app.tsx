@@ -55,6 +55,44 @@ export default function App({ Component, pageProps, router }: AppProps) {
       <BaseApp>
         <Component {...pageProps} />
       </BaseApp>
+      <style>{`
+                 body {
+                   background-color: rgb(17 24 39);
+                   min-height: 100vh;
+                   font-size: 0.875rem;
+                 }
+                 
+                 /* Make navbar text normal size */
+                 nav {
+                   font-size: 1rem;
+                 }
+                 
+                 /* Make other elements slightly smaller */
+                 .text-sm {
+                   font-size: 1.10rem;
+                 }
+                 
+                 .text-base {
+                   font-size: 0.875rem;
+                 }
+                 
+                 .text-lg {
+                   font-size: 1rem;
+                 }
+                 
+                 .text-xl {
+                   font-size: 1.125rem;
+                 }
+                 
+                 /* Make all text slightly smaller except navbar */
+                 * {
+                   font-size: 0.875rem;
+                 }
+                 
+                 nav * {
+                   font-size: 1rem;
+                 }
+               `}</style>
     </QueryClientProvider>
   )
 }

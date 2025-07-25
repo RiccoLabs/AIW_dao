@@ -403,6 +403,7 @@ const REALM = () => {
           </div>
         </div>
       </div>
+
       <div className="grid grid-cols-12 gap-4">
         {realmQuery.isLoading ? (
           <>
@@ -418,14 +419,17 @@ const REALM = () => {
         ) : realmQuery.data?.result !== undefined ? (
           <>
             <div
-              className={`bg-bkg-2 col-span-12 md:col-span-7 md:order-first lg:col-span-8 order-last rounded-lg`}
+              className={`bg-gray-800 col-span-12 md:col-span-7 md:order-first lg:col-span-8 order-last rounded-lg border border-gray-700`}
             >
               <RealmHeader />
-              <div className="p-4 md:p-6 ">
+              <div className="p-4 md:p-6 rounded-lg" style={{ backgroundColor: '#201F27' }}>
                 <div>
                   {realmInfo?.bannerImage || realmData?.bannerImage ? (
                     <>
-                      <img className="mb-10" src={realmData?.bannerImage || realmInfo?.bannerImage}></img>
+                      <img
+                        className="mb-10"
+                        src={realmData?.bannerImage || realmInfo?.bannerImage}
+                      ></img>
                       {/* temp. setup for Ukraine.SOL */}
                       {realmInfo?.sharedWalletId && (
                         <div>
@@ -449,7 +453,7 @@ const REALM = () => {
                 />
                 {activeTab === 'Proposals' && (
                   <>
-                    <div className="pb-3">
+                    <div className="pb-3 rounded-lg p-4">
                       <div className="flex items-center pb-4 space-x-3">
                         <Input
                           className="pl-8 w-full"
@@ -497,7 +501,7 @@ const REALM = () => {
                         </div>
                       </div>
                     </div>
-                    <div className="space-y-3">
+                    <div className="space-y-3 rounded-lg p-4 mt-4">
                       {filteredProposals.length > 0 ? (
                         <>
                           {paginatedProposals.map(([k, v]) =>
@@ -537,10 +541,20 @@ const REALM = () => {
               </div>
             </div>
             <div className="col-span-12 md:col-span-5 lg:col-span-4 space-y-4">
-              <TokenBalanceCardWrapper />
-              {!process?.env?.DISABLE_NFTS && <NFTSCompactWrapper />}
-              <AccountsCompactWrapper />
-              <AssetsCompactWrapper />
+              <div className="bg-gray-800 rounded-lg border border-gray-700">
+                <TokenBalanceCardWrapper />
+              </div>
+              {!process?.env?.DISABLE_NFTS && (
+                <div className="bg-gray-800 rounded-lg border border-gray-700">
+                  <NFTSCompactWrapper />
+                </div>
+              )}
+              <div className="bg-gray-800 rounded-lg border border-gray-700">
+                <AccountsCompactWrapper />
+              </div>
+              <div className="bg-gray-800 rounded-lg border border-gray-700">
+                <AssetsCompactWrapper />
+              </div>
             </div>
           </>
         ) : (

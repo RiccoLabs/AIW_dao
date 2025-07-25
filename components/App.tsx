@@ -41,6 +41,16 @@ import { useVsrClient } from '../VoterWeightPlugins/useVsrClient'
 import { useRealmVoterWeightPlugins } from '@hooks/useRealmVoterWeightPlugins'
 import TermsPopupModal from './TermsPopup'
 import PlausibleProvider from 'next-plausible'
+import AIWGovernanceHeader from './AIWGovernanceHeader'
+import { useLegacyVoterWeight } from '@hooks/queries/governancePower'
+import { useMintInfoByPubkeyQuery } from '@hooks/queries/mintInfo'
+import {
+  getAssociatedTokenAddressSync,
+  TOKEN_2022_PROGRAM_ID,
+} from '@solana/spl-token-new'
+import { useTokenAccountByKeyQuery } from 'TokenVoterPlugin/hooks/useTokenAccount'
+import { PublicKey } from '@solana/web3.js'
+import { BigNumber } from 'bignumber.js'
 
 const Notifications = dynamic(() => import('../components/Notification'), {
   ssr: false,
@@ -126,6 +136,53 @@ export function AppContents(props: Props) {
   const wallet = useWalletOnePointOh()
   const connection = useLegacyConnectionContext()
 
+  // Calculate governance power for AIW DAO using the same method as "My governance power" section
+  const { result: voterWeight, ready } = useLegacyVoterWeight()
+
+  // Get plugin mint key (same as TokenVoterPlugin)
+  const { plugins: communityPlugins } = useRealmVoterWeightPlugins('community')
+  const pluginParams = communityPlugins?.voterWeight[0]?.params as any
+  const pluginMintKey = pluginParams?.votingMintConfigs?.[0]?.mint ?? undefined
+
+  const mintInfo = useMintInfoByPubkeyQuery(pluginMintKey).data?.result
+
+  const ataKey = getAssociatedTokenAddressSync(
+    pluginMintKey ?? PublicKey.default,
+    wallet?.publicKey ?? PublicKey.default,
+    undefined,
+    TOKEN_2022_PROGRAM_ID,
+  )
+  const userPluginAta = useTokenAccountByKeyQuery(ataKey).data
+
+  const governancePower = useMemo(() => {
+    if (ready && voterWeight && mintInfo) {
+      // Get the community governance power from the voter weight
+      const communityPower = (voterWeight as any).voterWeights?.community
+
+      if (communityPower) {
+        // Format the value using mint decimals (same as VanillaVotingPower)
+        const formattedValue = new BigNumber(communityPower.toString())
+          .shiftedBy(-mintInfo.decimals)
+          .toNumber()
+        return formattedValue
+      }
+    }
+    return 0
+  }, [voterWeight, ready, mintInfo])
+
+  const availableTokens = useMemo(() => {
+    // Only calculate if wallet is connected and data is available
+    if (wallet?.connected && mintInfo && userPluginAta?.amount) {
+      const tokens = new BigNumber(userPluginAta.amount.toString())
+        .shiftedBy(-mintInfo.decimals)
+        .toNumber()
+      return tokens
+    }
+
+    // Return 0 if wallet not connected or data not ready
+    return 0
+  }, [mintInfo, userPluginAta, wallet?.connected])
+
   const router = useRouter()
   const { cluster } = router.query
   const updateSerumGovAccounts = useSerumGovStore(
@@ -134,7 +191,7 @@ export function AppContents(props: Props) {
   const { vsrClient } = useVsrClient()
 
   const realmName = realmInfo?.displayName ?? realm?.account?.name
-  const title = realmName ? `${realmName}` : 'Realms'
+  const title = realmName ? `${realmName}` : 'AIW DAO'
 
   // Note: ?v==${Date.now()} is added to the url to force favicon refresh.
   // Without it browsers would cache the last used and won't change it for different realms
@@ -235,13 +292,14 @@ export function AppContents(props: Props) {
   }, [cluster, updateSerumGovAccounts])
 
   return (
-    <div className="relative bg-bkg-1 text-fgd-1">
+    <div className="relative bg-gray-900 text-fgd-1 min-h-screen">
       <Head>
         <meta property="og:title" content={title} key="title" />
         <title>{title}</title>
         <style>{`
           body {
-            background-color: #17161c;
+            background-color: rgb(17 24 39);
+            min-height: 100vh;
           }
         `}</style>
         {faviconUrl && faviconExists ? (
@@ -326,19 +384,14 @@ export function AppContents(props: Props) {
       <ErrorBoundary>
         <ThemeProvider defaultTheme="Dark">
           <GatewayProvider>
-            <div className="relative color-white z-10 text-center w-full py-2">
-              Faster. Sharper. More. Yours.{' '}
-              <a
-                href="https://v2.realms.today"
-                rel="noreferrer"
-                target="_blank"
-                className="underline"
-              >
-                Try Realms v2
-              </a>
-            </div>
             <Telemetry></Telemetry>
             <NavBar />
+            {realm && (
+              <AIWGovernanceHeader
+                governancePower={governancePower}
+                availableTokens={availableTokens}
+              />
+            )}
             <Notifications />
             <TransactionLoader></TransactionLoader>
             <NftVotingCountingModal />

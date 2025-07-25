@@ -100,150 +100,78 @@ const ConnectWalletButton = (props) => {
     <div className="flex">
       <div
         disabled={connected}
-        className={`bg-bkg-2 hover:bg-bkg-3  border border-fgd-4 border-r-0 default-transition flex h-12 items-center pl-4 pr-3 sm:pl-1 sm:pr-2 rounded-l-full rounded-r-none ${
+        className={`border border-transparent default-transition flex items-center ${
           connected
             ? 'cursor-default'
-            : 'cursor-pointer hover:bg-bkg-3 focus:outline-none'
+            : 'cursor-pointer hover:shadow-lg focus:outline-none'
         }`}
+        style={{
+          background: 'linear-gradient(to right, #00C6FF, #FF00FF)',
+          color: 'white',
+          padding: '0.125rem 0.75rem',
+          fontSize: '0.875rem',
+          borderRadius: '0.375rem',
+          fontWeight: '500',
+          transition: 'all 0.3s',
+          lineHeight: '1.25rem',
+          height: '1.75rem',
+          minHeight: '1.75rem',
+        }}
         onClick={handleConnectDisconnect}
         {...props}
       >
-        <div className="relative flex items-center text-sm font-bold text-left text-fgd-1">
-          {
-            // TODO bring back debug wallet
-          }
+        <div className="relative flex items-center text-white font-medium">
           {debugAdapter ? (
             <div className="absolute -left-4 h-full text-red-400 opacity-90 pointer-events-none text-2xl drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)] -rotate-45">
               DEBUG
             </div>
           ) : null}
           {connected && publicKey ? (
-            <div className="hidden w-12 pr-2 sm:block">
-              <ProfileImage
-                publicKey={publicKey}
-                expanded={false}
-                className="h-9 text-fgd-3 w-9"
-              />
+            <div className="flex items-center">
+              <div className="w-5 h-5 bg-white rounded-full flex items-center justify-center mr-2 border border-blue-300">
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 108 108"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <rect width="108" height="108" rx="26" fill="#AB9FF2" />
+                  <path
+                    fillRule="evenodd"
+                    clipRule="evenodd"
+                    d="M46.5267 69.9229C42.0054 76.8509 34.4292 85.6182 24.348 85.6182C19.5824 85.6182 15 83.6563 15 75.1342C15 53.4305 44.6326 19.8327 72.1268 19.8327C87.768 19.8327 94 30.6846 94 43.0079C94 58.8258 83.7355 76.9122 73.5321 76.9122C70.2939 76.9122 68.7053 75.1342 68.7053 72.314C68.7053 71.5783 68.8275 70.7812 69.0719 69.9229C65.5893 75.8699 58.8685 81.3878 52.5754 81.3878C47.993 81.3878 45.6713 78.5063 45.6713 74.4598C45.6713 72.9884 45.9768 71.4556 46.5267 69.9229ZM83.6761 42.5794C83.6761 46.1704 81.5575 47.9658 79.1875 47.9658C76.7816 47.9658 74.6989 46.1704 74.6989 42.5794C74.6989 38.9885 76.7816 37.1931 79.1875 37.1931C81.5575 37.1931 83.6761 38.9885 83.6761 42.5794ZM70.2103 42.5795C70.2103 46.1704 68.0916 47.9658 65.7216 47.9658C63.3157 47.9658 61.233 46.1704 61.233 42.5795C61.233 38.9885 63.3157 37.1931 65.7216 37.1931C68.0916 37.1931 70.2103 38.9885 70.2103 42.5795Z"
+                    fill="#FFDFD8"
+                  />
+                </svg>
+              </div>
+              <div className="text-xs">
+                <div className="font-medium">{walletAddressFormatted}</div>
+              </div>
             </div>
           ) : (
-            <div className="hidden pl-2 pr-2 sm:block">
-              <img src={wallet?.adapter.icon} className="w-5 h-5" />
+            <div className="flex items-center">
+              <div className="w-5 h-5 bg-white rounded-full flex items-center justify-center mr-2 border border-blue-300">
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 108 108"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <rect width="108" height="108" rx="26" fill="#AB9FF2" />
+                  <path
+                    fillRule="evenodd"
+                    clipRule="evenodd"
+                    d="M46.5267 69.9229C42.0054 76.8509 34.4292 85.6182 24.348 85.6182C19.5824 85.6182 15 83.6563 15 75.1342C15 53.4305 44.6326 19.8327 72.1268 19.8327C87.768 19.8327 94 30.6846 94 43.0079C94 58.8258 83.7355 76.9122 73.5321 76.9122C70.2939 76.9122 68.7053 75.1342 68.7053 72.314C68.7053 71.5783 68.8275 70.7812 69.0719 69.9229C65.5893 75.8699 58.8685 81.3878 52.5754 81.3878C47.993 81.3878 45.6713 78.5063 45.6713 74.4598C45.6713 72.9884 45.9768 71.4556 46.5267 69.9229ZM83.6761 42.5794C83.6761 46.1704 81.5575 47.9658 79.1875 47.9658C76.7816 47.9658 74.6989 46.1704 74.6989 42.5794C74.6989 38.9885 76.7816 37.1931 79.1875 37.1931C81.5575 37.1931 83.6761 38.9885 83.6761 42.5794ZM70.2103 42.5795C70.2103 46.1704 68.0916 47.9658 65.7216 47.9658C63.3157 47.9658 61.233 46.1704 61.233 42.5795C61.233 38.9885 63.3157 37.1931 65.7216 37.1931C68.0916 37.1931 70.2103 38.9885 70.2103 42.5795Z"
+                    fill="#FFDFD8"
+                  />
+                </svg>
+              </div>
+              <div>{isLoading ? <Loading></Loading> : 'Select Wallet'}</div>
             </div>
           )}
-          <div>
-            {connected && publicKey ? (
-              <>
-                {connected && publicKey ? (
-                  <ProfileName
-                    publicKey={publicKey}
-                    width="100px"
-                    height="20px"
-                    dark={true}
-                  />
-                ) : null}
-                <StyledWalletProviderLabel className="font-normal text-fgd-3">
-                  {walletAddressFormatted}
-                </StyledWalletProviderLabel>
-              </>
-            ) : (
-              <>
-                {isLoading ? <Loading></Loading> : 'Connect'}
-                <StyledWalletProviderLabel className="font-normal text-fgd-3">
-                  {wallet?.adapter.name}
-                </StyledWalletProviderLabel>
-              </>
-            )}
-          </div>
         </div>
-      </div>
-
-      <div className="relative ">
-        <Menu>
-          {({ open }) => (
-            <>
-              <Menu.Button
-                className={`border bg-bkg-2 border-fgd-4 cursor-pointer default-transition h-12 w-12 py-2 px-2 rounded-r-full hover:bg-bkg-3 focus:outline-none`}
-              >
-                <ChevronDownIcon
-                  className={`${
-                    open ? 'transform rotate-180' : 'transform rotate-360'
-                  } default-transition h-5 m-auto ml-1 text-primary-light w-5`}
-                />
-              </Menu.Button>
-              <Menu.Items className="absolute right-0 z-20 w-48 p-2 border rounded-md shadow-md outline-none bg-bkg-1 border-fgd-4 top-14">
-                <>
-                  {wallets
-                    .filter(
-                      ({ adapter }) =>
-                        adapter.readyState !== WalletReadyState.Unsupported,
-                    )
-                    .map(({ adapter: { icon, name } }) => (
-                      <Menu.Item key={name}>
-                        <button
-                          className="flex items-center w-full p-2 font-normal default-transition h-9 hover:bg-bkg-3 hover:cursor-pointer hover:rounded focus:outline-none"
-                          onClick={() => select(name)}
-                        >
-                          <img src={icon} className="w-4 h-4 mr-2" />
-                          <span className="text-sm">{name}</span>
-
-                          {wallet?.adapter.name === name ? (
-                            <CheckCircleIcon className="w-5 h-5 ml-2 text-green" />
-                          ) : null}
-                        </button>
-                      </Menu.Item>
-                    ))}
-                  <Menu.Item key={'devnet'}>
-                    <div className="flex items-center w-full p-2 font-normal default-transition h-9 hover:bg-bkg-3 hover:cursor-pointer hover:rounded focus:outline-none">
-                      <span className="text-sm">Devnet</span>
-                      <Switch
-                        checked={currentCluster === 'devnet'}
-                        onChange={() => {
-                          handleToggleDevnet()
-                        }}
-                      />
-                    </div>
-                  </Menu.Item>
-                  {wallet && publicKey && (
-                    <>
-                      <hr
-                        className={`border border-fgd-3 opacity-50 mt-2 mb-2`}
-                      ></hr>
-                      <Menu.Item key={'profile'}>
-                        <div className="p-2">
-                          <Profile />
-                        </div>
-                      </Menu.Item>
-                      <hr
-                        className={`border border-fgd-3 opacity-50 mt-2 mb-2`}
-                      ></hr>
-                      <Menu.Item key={'disconnect'}>
-                        <button
-                          className="flex items-center w-full p-2 font-normal default-transition h-9 hover:bg-bkg-3 hover:cursor-pointer hover:rounded focus:outline-none"
-                          onClick={handleConnectDisconnect}
-                        >
-                          <BackspaceIcon className="w-4 h-4 mr-2" />
-                          <span className="text-sm">Disconnect</span>
-                        </button>
-                      </Menu.Item>
-                    </>
-                  )}
-                  <hr className="border border-fgd-3 opacity-50 mt-2 mb-2 sm:hidden" />
-                  <Menu.Item>
-                    <a
-                      className="flex items-center p-2 rounded transition-colors sm:hidden hover:bg-bkg-3"
-                      href="https://docs.realms.today/"
-                      target="_blank"
-                      rel="noreferrer"
-                    >
-                      <ExternalLinkIcon className="w-4 h-4 mr-2 stroke-white" />
-                      <div className="text-white text-sm">Read the Docs</div>
-                    </a>
-                  </Menu.Item>
-                </>
-              </Menu.Items>
-            </>
-          )}
-        </Menu>
       </div>
     </div>
   )
