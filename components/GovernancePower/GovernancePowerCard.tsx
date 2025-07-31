@@ -13,7 +13,6 @@ import Button, { SecondaryButton } from '@components/Button'
 import tokenPriceService from '@utils/services/tokenPrice'
 import TokenIcon from '@components/treasuryV2/icons/TokenIcon'
 import ImgWithLoader from '@components/ImgWithLoader'
-import { USDC_MINT } from '@blockworks-foundation/mango-v4'
 
 const GovernancePowerTitle = () => {
   const { symbol } = useRouter().query
@@ -22,7 +21,7 @@ const GovernancePowerTitle = () => {
 
   return (
     <div className="flex items-center justify-between mb-4">
-      <h3 className="mb-0">My governance power</h3>
+      <h3 className="mb-0 text-fgd-1">My governance power</h3>
       <Link href={fmtUrlWithCluster(`/dao/${symbol}/account/me`)}>
         <a
           className={`default-transition flex items-center text-fgd-2 text-sm transition-all hover:text-fgd-3 ${

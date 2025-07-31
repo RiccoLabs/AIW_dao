@@ -9,7 +9,7 @@ import { VSR_PLUGIN_PKS } from '@constants/plugins'
 import ErrorBoundary from '@components/ErrorBoundary'
 import useHandleGovernanceAssetsStore from '@hooks/handleGovernanceAssetsStore'
 import handleRouterHistory from '@hooks/handleRouterHistory'
-import NavBar from '@components/NavBar'
+import Navbar from '@components/Navbar'
 import PageBodyContainer from '@components/PageBodyContainer'
 import tokenPriceService from '@utils/services/tokenPrice'
 import TransactionLoader from '@components/TransactionLoader'
@@ -292,13 +292,13 @@ export function AppContents(props: Props) {
   }, [cluster, updateSerumGovAccounts])
 
   return (
-    <div className="relative bg-gray-900 text-fgd-1 min-h-screen">
+    <div className="relative bg-bkg-1 text-fgd-1 min-h-screen">
       <Head>
         <meta property="og:title" content={title} key="title" />
         <title>{title}</title>
         <style>{`
           body {
-            background-color: rgb(17 24 39);
+            background-color: var(--bg-primary);
             min-height: 100vh;
           }
         `}</style>
@@ -385,7 +385,9 @@ export function AppContents(props: Props) {
         <ThemeProvider defaultTheme="Dark">
           <GatewayProvider>
             <Telemetry></Telemetry>
-            <NavBar />
+            <Navbar />
+            {/* Spacer to prevent content from being hidden behind fixed navbar */}
+            <div className="h-20"></div>
             {realm && (
               <AIWGovernanceHeader
                 governancePower={governancePower}

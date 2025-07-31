@@ -117,12 +117,12 @@ const AIWGovernanceHeader: React.FC<AIWGovernanceHeaderProps> = ({
   }
 
   return (
-    <div className="w-full bg-gradient-to-r py-6">
+    <div className="w-full bg-bkg-1 py-6">
       <div className="px-4 xl:px-4 md:px-8">
         <div className="flex flex-col sm:grid sm:grid-cols-12 relative">
           <div className="col-span-12 xl:col-start-2 xl:col-span-10">
             {/* Header Section */}
-            <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center justify-between mb-8">
               <div className="flex items-center space-x-3">
                 <div className="w-8 h-8 bg-blue-400 rounded-lg flex items-center justify-center">
                   <svg
@@ -138,10 +138,10 @@ const AIWGovernanceHeader: React.FC<AIWGovernanceHeaderProps> = ({
                   </svg>
                 </div>
                 <div>
-                  <h1 className="text-2xl font-bold text-white">
+                  <h1 className="text-2xl font-bold text-fgd-1">
                     AIW DAO Governance
                   </h1>
-                  <p className="text-gray-300 text-sm">
+                  <p className="text-fgd-3 text-sm">
                     Stake AIW tokens to participate in governance and earn
                     rewards
                   </p>
@@ -164,13 +164,13 @@ const AIWGovernanceHeader: React.FC<AIWGovernanceHeaderProps> = ({
             </div>
 
             {/* Three Cards Section */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 bg-transparent">
               {/* Card 1: AIW Staking */}
-              <div className="bg-gray-800 rounded-lg p-5 border border-gray-700">
-                <div className="flex items-center space-x-3 mb-4">
-                  <div className="w-8 h-8 bg-blue-400 rounded-lg flex items-center justify-center">
+              <div className="bg-bkg-3 rounded-xl p-6 border border-bkg-4 shadow-sm transition-colors">
+                <div className="flex items-center space-x-3 mb-6">
+                  <div className="w-10 h-10 bg-blue-400 rounded-lg flex items-center justify-center">
                     <svg
-                      className="w-5 h-5 text-white"
+                      className="w-6 h-6 text-white"
                       fill="none"
                       stroke="currentColor"
                       strokeWidth="2"
@@ -181,20 +181,22 @@ const AIWGovernanceHeader: React.FC<AIWGovernanceHeaderProps> = ({
                       <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
                     </svg>
                   </div>
-                  <h3 className="text-lg font-bold text-white">AIW Staking</h3>
+                  <h3 className="text-lg font-bold text-fgd-1">AIW Staking</h3>
                 </div>
-                <div className="space-y-3 mb-6">
-                  <div className="flex justify-between">
-                    <span className="text-gray-400">Staked Amount:</span>
-                    <span className="text-white">
+                <div className="space-y-4 mb-6">
+                  <div className="flex justify-between items-center">
+                    <span className="text-fgd-3 text-sm">Staked Amount:</span>
+                    <span className="text-fgd-1 font-semibold">
                       {connected
                         ? `${currentGovernancePower.toLocaleString()} AIW`
                         : '0 AIW'}
                     </span>
                   </div>
-                  <div className="flex justify-between">
-                    <span className="text-gray-400">Tokens to deposit:</span>
-                    <span className="text-white">
+                  <div className="flex justify-between items-center">
+                    <span className="text-fgd-3 text-sm">
+                      Tokens to deposit:
+                    </span>
+                    <span className="text-fgd-1 font-semibold">
                       {connected
                         ? `${availableTokens.toLocaleString()} AIW`
                         : '0 AIW'}
@@ -211,11 +213,11 @@ const AIWGovernanceHeader: React.FC<AIWGovernanceHeaderProps> = ({
               </div>
 
               {/* Card 2: Voting Power with Proper Gauge */}
-              <div className="bg-gray-800 rounded-lg p-5 border border-gray-700">
-                <div className="flex items-center space-x-3 mb-4">
-                  <div className="w-8 h-8 bg-blue-400 rounded-lg flex items-center justify-center">
+              <div className="bg-bkg-3 rounded-xl p-6 border border-bkg-4 shadow-sm transition-colors">
+                <div className="flex items-center space-x-3 mb-6">
+                  <div className="w-10 h-10 bg-blue-400 rounded-lg flex items-center justify-center">
                     <svg
-                      className="w-5 h-5 text-white"
+                      className="w-6 h-6 text-white"
                       fill="none"
                       stroke="currentColor"
                       strokeWidth="2"
@@ -226,21 +228,23 @@ const AIWGovernanceHeader: React.FC<AIWGovernanceHeaderProps> = ({
                       <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
                     </svg>
                   </div>
-                  <h3 className="text-lg font-bold text-white">Voting Power</h3>
+                  <h3 className="text-lg font-bold text-fgd-1">Voting Power</h3>
                 </div>
 
-                <SemiCircularGauge
-                  value={currentGovernancePower}
-                  maxValue={maxVotingPower}
-                />
+                <div className="flex justify-center mb-4">
+                  <SemiCircularGauge
+                    value={currentGovernancePower}
+                    maxValue={maxVotingPower}
+                  />
+                </div>
               </div>
 
               {/* Card 3: Rewards */}
-              <div className="bg-gray-800 rounded-lg p-5 border border-gray-700">
-                <div className="flex items-center space-x-3 mb-4">
-                  <div className="w-8 h-8 bg-blue-400 rounded-lg flex items-center justify-center">
+              <div className="bg-bkg-3 rounded-xl p-6 border border-bkg-4 shadow-sm transition-colors">
+                <div className="flex items-center space-x-3 mb-6">
+                  <div className="w-10 h-10 bg-blue-400 rounded-lg flex items-center justify-center">
                     <svg
-                      className="w-5 h-5 text-white"
+                      className="w-6 h-6 text-white"
                       fill="none"
                       stroke="currentColor"
                       strokeWidth="2"
@@ -252,13 +256,13 @@ const AIWGovernanceHeader: React.FC<AIWGovernanceHeaderProps> = ({
                       <path d="M18.7 8l-5.1 5.2-2.8-2.7L7 14.3" />
                     </svg>
                   </div>
-                  <h3 className="text-lg font-semibold text-white">Rewards</h3>
+                  <h3 className="text-lg font-semibold text-fgd-1">Rewards</h3>
                 </div>
 
                 {/* Rewards Grid */}
-                <div className="grid grid-cols-2 gap-3 mb-4">
-                  <div className="bg-gray-700 rounded-lg p-3">
-                    <div className="flex items-center space-x-2 mb-2">
+                <div className="grid grid-cols-2 gap-4 mb-6">
+                  <div className="bg-bkg-4 rounded-lg p-4">
+                    <div className="flex items-center space-x-2 mb-3">
                       <svg
                         className="w-4 h-4 text-blue-400"
                         fill="none"
@@ -273,15 +277,17 @@ const AIWGovernanceHeader: React.FC<AIWGovernanceHeaderProps> = ({
                         <path d="m22 21-2-2" />
                         <path d="M16 16.28A6 6 0 0 0 18 12h-4a4 4 0 0 0-3 3" />
                       </svg>
-                      <span className="text-gray-400 text-sm">
+                      <span className="text-fgd-3 text-sm">
                         Used Voting Power
                       </span>
                     </div>
-                    <div className="text-white font-semibold">0 votes</div>
+                    <div className="text-fgd-1 font-semibold text-lg">
+                      0 votes
+                    </div>
                   </div>
 
-                  <div className="bg-gray-700 rounded-lg p-3">
-                    <div className="flex items-center space-x-2 mb-2">
+                  <div className="bg-bkg-4 rounded-lg p-4">
+                    <div className="flex items-center space-x-2 mb-3">
                       <svg
                         className="w-4 h-4 text-blue-400"
                         fill="none"
@@ -294,26 +300,24 @@ const AIWGovernanceHeader: React.FC<AIWGovernanceHeaderProps> = ({
                         <path d="M3 3v18h18" />
                         <path d="M18.7 8l-5.1 5.2-2.8-2.7L7 14.3" />
                       </svg>
-                      <span className="text-gray-400 text-sm">APY</span>
+                      <span className="text-fgd-3 text-sm">APY</span>
                     </div>
-                    <div className="text-white font-semibold text-xl">4.3%</div>
+                    <div className="text-fgd-1 font-semibold text-xl">4.3%</div>
                   </div>
                 </div>
 
                 {/* Rewards Footer */}
                 <div className="flex items-center justify-between">
                   <div className="flex flex-col">
-                    <span className="text-gray-400 text-sm">
-                      Earned Rewards:
-                    </span>
-                    <span className="text-white font-semibold">
+                    <span className="text-fgd-3 text-sm">Earned Rewards:</span>
+                    <span className="text-fgd-1 font-semibold text-lg">
                       {connected
                         ? `${currentGovernancePower.toLocaleString()} AIW`
                         : '0 AIW'}
                     </span>
                   </div>
 
-                  <button className="px-4 py-2 bg-gray-700 text-white rounded-lg font-medium hover:bg-gray-600 transition-colors">
+                  <button className="px-4 py-2 bg-bkg-4 text-fgd-1 rounded-lg font-medium hover:bg-bkg-5 transition-colors">
                     Claim
                   </button>
                 </div>

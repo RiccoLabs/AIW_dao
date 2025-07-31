@@ -57,7 +57,7 @@ export default function App({ Component, pageProps, router }: AppProps) {
       </BaseApp>
       <style>{`
                  body {
-                   background-color: rgb(17 24 39);
+                   background-color: var(--bg-primary, rgb(17 24 39));
                    min-height: 100vh;
                    font-size: 0.875rem;
                  }

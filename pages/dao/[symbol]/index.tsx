@@ -419,10 +419,10 @@ const REALM = () => {
         ) : realmQuery.data?.result !== undefined ? (
           <>
             <div
-              className={`bg-gray-800 col-span-12 md:col-span-7 md:order-first lg:col-span-8 order-last rounded-lg border border-gray-700`}
+              className={`bg-bkg-1 col-span-12 md:col-span-7 md:order-first lg:col-span-8 order-last rounded-lg border border-bkg-4 hover:bg-bkg-2 transition-colors`}
             >
               <RealmHeader />
-              <div className="p-4 md:p-6 rounded-lg" style={{ backgroundColor: '#201F27' }}>
+              <div className="p-4 md:p-6 rounded-lg bg-bkg-2">
                 <div>
                   {realmInfo?.bannerImage || realmData?.bannerImage ? (
                     <>
@@ -541,18 +541,18 @@ const REALM = () => {
               </div>
             </div>
             <div className="col-span-12 md:col-span-5 lg:col-span-4 space-y-4">
-              <div className="bg-gray-800 rounded-lg border border-gray-700">
+              <div className="bg-bkg-3 rounded-lg border border-bkg-4 hover:bg-bkg-4 transition-colors">
                 <TokenBalanceCardWrapper />
               </div>
               {!process?.env?.DISABLE_NFTS && (
-                <div className="bg-gray-800 rounded-lg border border-gray-700">
+                <div className="bg-bkg-3 rounded-lg border border-bkg-4 hover:bg-bkg-4 transition-colors">
                   <NFTSCompactWrapper />
                 </div>
               )}
-              <div className="bg-gray-800 rounded-lg border border-gray-700">
+              <div className="bg-bkg-3 rounded-lg border border-bkg-4 hover:bg-bkg-4 transition-colors">
                 <AccountsCompactWrapper />
               </div>
-              <div className="bg-gray-800 rounded-lg border border-gray-700">
+              <div className="bg-bkg-3 rounded-lg border border-bkg-4 hover:bg-bkg-4 transition-colors">
                 <AssetsCompactWrapper />
               </div>
             </div>

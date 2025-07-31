@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useTheme } from 'next-themes'
-import { MoonIcon, SunIcon } from '@heroicons/react/outline'
+import { Moon, Sun } from 'lucide-react'
 
 const ThemeSwitch = () => {
   const { theme, setTheme } = useTheme()
@@ -11,17 +11,17 @@ const ThemeSwitch = () => {
   return mounted ? (
     theme === 'Dark' ? (
       <button
-        className="bg-bkg-2 default-transition flex items-center justify-center h-10 rounded-full w-10 hover:bg-bkg-3"
+        className="bg-bkg-4 hover:bg-bkg-5 transition-colors flex items-center justify-center h-8 w-8 rounded-md border border-bkg-4"
         onClick={() => setTheme('Light')}
       >
-        <SunIcon className="h-5 text-fgd-1 w-5" />
+        <Sun className="h-4 text-fgd-1 w-4" />
       </button>
     ) : (
       <button
-        className="bg-bkg-2 default-transition flex items-center justify-center h-10 rounded-full w-10 hover:bg-bkg-3"
+        className="bg-bkg-4 hover:bg-bkg-5 transition-colors flex items-center justify-center h-8 w-8 rounded-md border border-bkg-4"
         onClick={() => setTheme('Dark')}
       >
-        <MoonIcon className="h-5 text-fgd-1 w-5" />
+        <Moon className="h-4 text-fgd-1 w-4" />
       </button>
     )
   ) : null
