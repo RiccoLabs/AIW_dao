@@ -453,7 +453,7 @@ const REALM = () => {
                 />
                 {activeTab === 'Proposals' && (
                   <>
-                    <div className="pb-3 rounded-lg p-4">
+                    <div className="pb-3 rounded-lg p-4 bg-bkg-2">
                       <div className="flex items-center pb-4 space-x-3">
                         <Input
                           className="pl-8 w-full"
@@ -541,18 +541,18 @@ const REALM = () => {
               </div>
             </div>
             <div className="col-span-12 md:col-span-5 lg:col-span-4 space-y-4">
-              <div className="bg-bkg-3 rounded-lg border border-bkg-4 hover:bg-bkg-4 transition-colors">
+              <div className="bg-bkg-2 rounded-lg border border-bkg-4 hover:bg-bkg-3 transition-colors">
                 <TokenBalanceCardWrapper />
               </div>
               {!process?.env?.DISABLE_NFTS && (
-                <div className="bg-bkg-3 rounded-lg border border-bkg-4 hover:bg-bkg-4 transition-colors">
+                <div className="bg-bkg-2 rounded-lg border border-bkg-4 hover:bg-bkg-3 transition-colors">
                   <NFTSCompactWrapper />
                 </div>
               )}
-              <div className="bg-bkg-3 rounded-lg border border-bkg-4 hover:bg-bkg-4 transition-colors">
+              <div className="bg-bkg-2 rounded-lg border border-bkg-4 hover:bg-bkg-3 transition-colors">
                 <AccountsCompactWrapper />
               </div>
-              <div className="bg-bkg-3 rounded-lg border border-bkg-4 hover:bg-bkg-4 transition-colors">
+              <div className="bg-bkg-2 rounded-lg border border-bkg-4 hover:bg-bkg-3 transition-colors">
                 <AssetsCompactWrapper />
               </div>
             </div>

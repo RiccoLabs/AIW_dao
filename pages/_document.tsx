@@ -49,12 +49,12 @@ class RealmsDocument extends Document {
             rel="stylesheet"
           />
           <link rel="stylesheet" href="https://use.typekit.net/cwm7dgy.css" />
-          <link rel="manifest" href="/manifest.json" />
+          {/* <link rel="manifest" href="/manifest.json" />
           <meta name="msapplication-TileColor" content="#ffffff" />
           <meta
             name="msapplication-TileImage"
             content="/favicons/ms-icon-144x144.png"
-          />
+          /> */}
           <meta
             httpEquiv="Content-Security-Policy"
             content="upgrade-insecure-requests"

@@ -34,7 +34,7 @@ const SemiCircularGauge: React.FC<{
         <path
           d="M20,100 A80,80 0 0,1 180,100"
           fill="none"
-          stroke="#374151"
+          stroke="var(--bkg-4)"
           strokeWidth="12"
         />
 
@@ -62,7 +62,7 @@ const SemiCircularGauge: React.FC<{
           textAnchor="middle"
           fontSize="16"
           fontWeight="bold"
-          fill="#e5e7eb"
+          fill="var(--fgd-1)"
         >
           {value > maxValue
             ? `${maxValue.toLocaleString()}+`
@@ -71,7 +71,13 @@ const SemiCircularGauge: React.FC<{
         </text>
 
         {/* Label */}
-        <text x="100" y="65" textAnchor="middle" fontSize="12" fill="#9ca3af">
+        <text
+          x="100"
+          y="65"
+          textAnchor="middle"
+          fontSize="12"
+          fill="var(--fgd-3)"
+        >
           Ricco Votes
         </text>
       </svg>
@@ -124,19 +130,17 @@ const AIWGovernanceHeader: React.FC<AIWGovernanceHeaderProps> = ({
             {/* Header Section */}
             <div className="flex items-center justify-between mb-8">
               <div className="flex items-center space-x-3">
-                <div className="w-8 h-8 bg-blue-400 rounded-lg flex items-center justify-center">
-                  <svg
-                    className="w-5 h-5 text-white"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    viewBox="0 0 24 24"
-                  >
-                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
-                  </svg>
-                </div>
+                <svg
+                  className="w-8 h-8 text-blue-400"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  viewBox="0 0 24 24"
+                >
+                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                </svg>
                 <div>
                   <h1 className="text-2xl font-bold text-fgd-1">
                     AIW DAO Governance
@@ -166,22 +170,25 @@ const AIWGovernanceHeader: React.FC<AIWGovernanceHeaderProps> = ({
             {/* Three Cards Section */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 bg-transparent">
               {/* Card 1: AIW Staking */}
-              <div className="bg-bkg-3 rounded-xl p-6 border border-bkg-4 shadow-sm transition-colors">
+              <div className="bg-bkg-2 rounded-xl p-6 border border-bkg-4 shadow-sm transition-colors">
                 <div className="flex items-center space-x-3 mb-6">
-                  <div className="w-10 h-10 bg-blue-400 rounded-lg flex items-center justify-center">
-                    <svg
-                      className="w-6 h-6 text-white"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      viewBox="0 0 24 24"
-                    >
-                      <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
-                    </svg>
-                  </div>
-                  <h3 className="text-lg font-bold text-fgd-1">AIW Staking</h3>
+                  <svg
+                    className="w-6 h-6 text-blue-400"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    viewBox="0 0 24 24"
+                  >
+                    <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
+                  </svg>
+                  <h3
+                    className="text-lg font-bold text-fgd-1"
+                    style={{ fontSize: '18px' }}
+                  >
+                    AIW Staking
+                  </h3>
                 </div>
                 <div className="space-y-4 mb-6">
                   <div className="flex justify-between items-center">
@@ -213,22 +220,25 @@ const AIWGovernanceHeader: React.FC<AIWGovernanceHeaderProps> = ({
               </div>
 
               {/* Card 2: Voting Power with Proper Gauge */}
-              <div className="bg-bkg-3 rounded-xl p-6 border border-bkg-4 shadow-sm transition-colors">
+              <div className="bg-bkg-2 rounded-xl p-6 border border-bkg-4 shadow-sm transition-colors">
                 <div className="flex items-center space-x-3 mb-6">
-                  <div className="w-10 h-10 bg-blue-400 rounded-lg flex items-center justify-center">
-                    <svg
-                      className="w-6 h-6 text-white"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      viewBox="0 0 24 24"
-                    >
-                      <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
-                    </svg>
-                  </div>
-                  <h3 className="text-lg font-bold text-fgd-1">Voting Power</h3>
+                  <svg
+                    className="w-6 h-6 text-blue-400"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    viewBox="0 0 24 24"
+                  >
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                  </svg>
+                  <h3
+                    className="text-lg font-bold text-fgd-1"
+                    style={{ fontSize: '18px' }}
+                  >
+                    Voting Power
+                  </h3>
                 </div>
 
                 <div className="flex justify-center mb-4">
@@ -240,23 +250,26 @@ const AIWGovernanceHeader: React.FC<AIWGovernanceHeaderProps> = ({
               </div>
 
               {/* Card 3: Rewards */}
-              <div className="bg-bkg-3 rounded-xl p-6 border border-bkg-4 shadow-sm transition-colors">
+              <div className="bg-bkg-2 rounded-xl p-6 border border-bkg-4 shadow-sm transition-colors">
                 <div className="flex items-center space-x-3 mb-6">
-                  <div className="w-10 h-10 bg-blue-400 rounded-lg flex items-center justify-center">
-                    <svg
-                      className="w-6 h-6 text-white"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      viewBox="0 0 24 24"
-                    >
-                      <path d="M3 3v18h18" />
-                      <path d="M18.7 8l-5.1 5.2-2.8-2.7L7 14.3" />
-                    </svg>
-                  </div>
-                  <h3 className="text-lg font-semibold text-fgd-1">Rewards</h3>
+                  <svg
+                    className="w-6 h-6 text-blue-400"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    viewBox="0 0 24 24"
+                  >
+                    <path d="M3 3v18h18" />
+                    <path d="M18.7 8l-5.1 5.2-2.8-2.7L7 14.3" />
+                  </svg>
+                  <h3
+                    className="text-lg font-semibold text-fgd-1"
+                    style={{ fontSize: '18px' }}
+                  >
+                    Rewards
+                  </h3>
                 </div>
 
                 {/* Rewards Grid */}

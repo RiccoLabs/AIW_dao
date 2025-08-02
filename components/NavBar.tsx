@@ -34,6 +34,7 @@ import {
   Flame,
   Lock,
   Gift,
+  BadgeCheck,
 } from 'lucide-react'
 import { routes } from '../env'
 import ConnectWalletButton from './ConnectWalletButton'
@@ -56,6 +57,7 @@ interface NavItemProps {
   currentTheme: string
   activePage: string
   index: number
+  isDark: boolean
 }
 
 interface NavbarProps {
@@ -71,6 +73,7 @@ const NavItem: React.FC<NavItemProps> = ({
   currentTheme,
   activePage,
   index,
+  isDark,
 }) => {
   const menuRef = useRef<HTMLDivElement>(null)
   const [openSubMenu, setOpenSubMenu] = useState<string | null>(null)
@@ -110,11 +113,19 @@ const NavItem: React.FC<NavItemProps> = ({
 
       {items && items.length > 0 && (
         <div
-          className={`absolute left-0 mt-1 w-48 rounded-md shadow-lg bg-bkg-3 border border-bkg-4 z-50 transform transition-all duration-200 ${
+          className={`absolute left-0 mt-1 w-48 rounded-md z-50 transform transition-all duration-200 ${
             isOpen
               ? 'opacity-100 translate-y-0'
               : 'opacity-0 -translate-y-2 pointer-events-none'
           }`}
+          style={{
+            backgroundColor: isDark ? '#1f2937' : '#ffffff',
+            borderColor: isDark ? '#374151' : '#d1d5db',
+            borderWidth: '1px',
+            borderStyle: 'solid',
+            boxShadow:
+              '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
+          }}
         >
           <div className="py-2">
             {items.map((item, index) => (
@@ -129,7 +140,9 @@ const NavItem: React.FC<NavItemProps> = ({
                           (subItem) => subItem.path === activePage,
                         )
                           ? 'bg-neonBlue/10 text-neonBlue'
-                          : 'text-fgd-3 hover:bg-bkg-4 hover:text-neonBlue'
+                          : isDark
+                          ? 'text-gray-300 hover:bg-gray-600 hover:text-neonBlue'
+                          : 'text-grayBlue hover:bg-gray-200 hover:text-neonBlue'
                       } flex items-center justify-between`}
                     >
                       <div className="flex items-center">
@@ -163,7 +176,12 @@ const NavItem: React.FC<NavItemProps> = ({
                         openSubMenu === item.path ? 'max-h-60' : 'max-h-0'
                       }`}
                     >
-                      <div className="py-1 bg-bkg-4 mx-2 my-1 rounded-md">
+                      <div
+                        className="py-1 mx-2 my-1 rounded-md"
+                        style={{
+                          backgroundColor: isDark ? '#374151' : '#f3f4f6',
+                        }}
+                      >
                         {item.subItems.map((subItem, subIndex) => (
                           <button
                             key={subIndex}
@@ -171,7 +189,9 @@ const NavItem: React.FC<NavItemProps> = ({
                             className={`block w-full text-left px-4 py-2 text-sm ${
                               activePage === subItem.path
                                 ? 'text-neonBlue font-medium'
-                                : 'text-fgd-3 hover:text-neonBlue'
+                                : isDark
+                                ? 'text-gray-300 hover:text-neonBlue'
+                                : 'text-grayBlue hover:text-neonBlue'
                             } flex items-center`}
                           >
                             <span
@@ -196,7 +216,9 @@ const NavItem: React.FC<NavItemProps> = ({
                     className={`block w-full text-left px-4 py-2.5 text-sm font-semibold ${
                       activePage === item.path
                         ? 'bg-neonBlue/10 text-neonBlue'
-                        : 'text-fgd-3 hover:bg-bkg-4 hover:text-neonBlue'
+                        : isDark
+                        ? 'text-gray-300 hover:bg-gray-600 hover:text-neonBlue'
+                        : 'text-grayBlue hover:bg-gray-200 hover:text-neonBlue'
                     } flex items-center`}
                   >
                     <span
@@ -227,19 +249,26 @@ const NavItem: React.FC<NavItemProps> = ({
 }
 
 const Navbar: React.FC<NavbarProps> = ({ currentTheme }) => {
-  const { theme } = useTheme()
+  const { theme, resolvedTheme } = useTheme()
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [activePage, setActivePage] = useState('officialPortfolio')
   const [openMenuIndex, setOpenMenuIndex] = useState<number | null>(null)
   const [scrolled, setScrolled] = useState(false)
   const [hidden, setHidden] = useState(false)
   const [lastScrollY, setLastScrollY] = useState(0)
+  const [mounted, setMounted] = useState(false)
   const navRef = useRef<HTMLElement>(null)
   const router = useRouter()
 
-  // Use theme from context if not provided as prop
-  const actualTheme = currentTheme || (theme === 'Dark' ? 'dark' : 'default')
-  const isDark = actualTheme === 'dark'
+  // Use theme from context if not provided as prop, with proper fallback
+  const actualTheme =
+    currentTheme || (resolvedTheme === 'Dark' ? 'dark' : 'light')
+  const isDark = mounted ? actualTheme === 'dark' : false
+
+  // Ensure component is mounted before rendering theme-dependent content
+  useEffect(() => {
+    setMounted(true)
+  }, [])
 
   // For mobile menu - track which sections are expanded
   const [expandedSections, setExpandedSections] = useState<number[]>([])
@@ -361,9 +390,9 @@ const Navbar: React.FC<NavbarProps> = ({ currentTheme }) => {
           icon: <Receipt className="h-3 w-3" />,
         },
         {
-          name: 'Test',
+          name: 'Whitelist',
           path: routes[8],
-          icon: <Wrench className="h-3 w-3" />,
+        icon: <BadgeCheck className="h-3 w-3" />,
         },
       ],
     },
@@ -550,13 +579,40 @@ const Navbar: React.FC<NavbarProps> = ({ currentTheme }) => {
     return expandedSections.includes(Number(key))
   }
 
+  // Don't render until mounted to prevent theme mismatch
+  if (!mounted) {
+    return (
+      <nav
+        ref={navRef}
+        className="fixed w-full z-50 transition-all duration-300 bg-bkg-1 border-b border-bkg-4"
+      >
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between h-14 transition-all duration-300">
+            <div className="flex items-center">
+              <div className="flex-shrink-0 flex items-center">
+                <Link
+                  href="/realms"
+                  className="font-bold text-xl flex items-center hover:opacity-80 transition-opacity"
+                >
+                  <img
+                    src="https://i.ibb.co/8yybjn9/AIW.png"
+                    alt="AIW Logo"
+                    className="transition-all duration-300 h-7 w-auto"
+                  />
+                </Link>
+              </div>
+            </div>
+          </div>
+        </div>
+      </nav>
+    )
+  }
+
   return (
     <nav
       ref={navRef}
       className={`fixed w-full z-50 transition-all duration-300 ${
-        scrolled
-          ? 'bg-bkg-1/95 backdrop-blur-sm shadow-md'
-          : 'bg-bkg-1 border-b border-bkg-4'
+        scrolled ? 'bg-bkg-1 shadow-md' : 'bg-bkg-1 border-b border-bkg-4'
       } ${
         hidden
           ? 'transform -translate-y-full'
@@ -582,7 +638,7 @@ const Navbar: React.FC<NavbarProps> = ({ currentTheme }) => {
                   alt="AIW Logo"
                   className={`transition-all duration-300 ${
                     scrolled ? 'h-6' : 'h-7'
-                  } w-auto filter invert`}
+                  } w-auto ${mounted && isDark ? 'filter invert' : ''}`}
                 />
               </Link>
             </div>
@@ -599,14 +655,15 @@ const Navbar: React.FC<NavbarProps> = ({ currentTheme }) => {
                   currentTheme={actualTheme}
                   activePage={activePage}
                   index={index}
+                  isDark={mounted ? isDark : false}
                 />
               ))}
             </div>
           </div>
 
           <div className="flex items-center space-x-4">
-            {/* Theme Switch Button */}
-            <ThemeSwitch />
+            {/* Theme Switch Button - Hidden */}
+            {/* <ThemeSwitch /> */}
             {/* Wallet Connect Button */}
             <ConnectWalletButton />
             {/* Mobile Menu Button */}

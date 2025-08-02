@@ -63,7 +63,7 @@ const GovernancePowerCard = () => {
     <div>
       <GovernancePowerTitle />
       {!connected ? (
-        <div className={'text-xs text-white/50 mt-8'}>
+        <div className={'text-sm text-fgd-1 mt-8 font-semibold'}>
           Connect your wallet to see governance power
         </div>
       ) : !isReady ? (

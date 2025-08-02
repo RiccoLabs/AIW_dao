@@ -23,7 +23,7 @@ const AccountsCompactWrapper = () => {
   const isLoadingAccounts = useGovernanceAssetsStore((s) => s.loadTokenAccounts)
 
   return (
-    <div className="bg-bkg-3 p-4 md:p-6 rounded-lg transition-all">
+    <div className="p-4 md:p-6 rounded-lg transition-all">
       <div className="flex items-center justify-between pb-4">
         <h3 className="mb-0 text-fgd-1">DAO Wallets &amp; Assets</h3>
         <Link href={fmtUrlWithCluster(`/dao/${symbol}/treasury/v2`)}>

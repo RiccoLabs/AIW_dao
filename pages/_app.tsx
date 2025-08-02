@@ -64,12 +64,17 @@ export default function App({ Component, pageProps, router }: AppProps) {
                  
                  /* Make navbar text normal size */
                  nav {
-                   font-size: 1rem;
+                   font-size: 0.875rem;
                  }
                  
                  /* Make other elements slightly smaller */
                  .text-sm {
-                   font-size: 1.10rem;
+                   font-size: 14px;
+                 }
+                 
+                 /* Ensure navbar text is exactly 14px */
+                 nav .text-sm {
+                   font-size: 14px !important;
                  }
                  
                  .text-base {
@@ -90,7 +95,7 @@ export default function App({ Component, pageProps, router }: AppProps) {
                  }
                  
                  nav * {
-                   font-size: 1rem;
+                   font-size: 0.875rem;
                  }
                `}</style>
     </QueryClientProvider>

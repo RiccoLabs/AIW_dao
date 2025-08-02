@@ -20,10 +20,10 @@ const DefiSummary = ({
   const [startDefiTreasury, setStartDefiTreasury] = useState(false)
   const [treasurySelect, setTreasurySelect] = useTreasurySelectState()
   const [selectedDepositPlan, setSelectedDepositPlan] = useState<Plan | null>(
-    null
+    null,
   )
   const [selectedWithdrawPlan, setSelectedWithdrawPlan] = useState<Plan | null>(
-    null
+    null,
   )
 
   const positions = wallet
@@ -31,7 +31,7 @@ const DefiSummary = ({
     : unfilteredPositions
   const { totalDepositedUsd, averageApr, totalEarnings } = aggregateStats(
     plans,
-    positions
+    positions,
   )
 
   if (
@@ -47,7 +47,7 @@ const DefiSummary = ({
           'mb-3 px-4 py-2 rounded-md w-full flex flex-col gap-2',
           !wallet
             ? 'cursor-default'
-            : 'cursor-pointer bg-bkg-2 hover:bg-bkg-1 text-fgd-3 text-sm'
+            : 'cursor-pointer bg-bkg-2 hover:bg-bkg-1 text-fgd-3 text-sm',
         )}
       >
         Start Defi Treasury for this wallet
@@ -61,7 +61,7 @@ const DefiSummary = ({
         <DefiDepositModal
           wallet={wallet}
           positions={positions.filter(
-            (p) => p.planId === selectedDepositPlan?.id
+            (p) => p.planId === selectedDepositPlan?.id,
           )}
           plan={selectedDepositPlan}
           isOpen={!!selectedDepositPlan}
@@ -72,7 +72,7 @@ const DefiSummary = ({
         <DefiWithdrawModal
           wallet={wallet}
           positions={positions.filter(
-            (p) => p.planId === selectedWithdrawPlan?.id
+            (p) => p.planId === selectedWithdrawPlan?.id,
           )}
           plan={selectedWithdrawPlan}
           isOpen={!!selectedWithdrawPlan}
@@ -93,7 +93,7 @@ const DefiSummary = ({
           'mb-3 rounded-md w-full flex flex-col gap-2 relative overflow-hidden',
           !wallet
             ? 'cursor-default'
-            : 'px-4 py-2 cursor-pointer bg-bkg-2 hover:bg-bkg-1'
+            : 'px-4 py-2 cursor-pointer bg-bkg-2 hover:bg-bkg-1',
         )}
       >
         <div
@@ -109,7 +109,7 @@ const DefiSummary = ({
                 wallet?.governanceAddress &&
               treasurySelect.selectedWallet.address === wallet?.address
               ? 'bg-gradient-to-r from-[#00C2FF] via-[#00E4FF] to-[#87F2FF]'
-              : 'bg-transparent'
+              : 'bg-transparent',
           )}
         />
         <div className="flex justify-between">

@@ -11,6 +11,7 @@ export const routes = [
     `${BASE_PATH}/pool`,
     `${BASE_PATH}/dao`,
     `${BASE_PATH}/growth-lab`,
+    `${BASE_PATH}/whitelist`,
     `${BASE_PATH}/notice`,
     `${BASE_PATH}/sns`,
     `${BASE_PATH}/feed`,

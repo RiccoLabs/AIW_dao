@@ -243,9 +243,7 @@ const TokenBalanceCardWrapper = ({
   inAccountDetails?: boolean
 }) => {
   return (
-    <div
-      className={`rounded-lg bg-bkg-2 ${inAccountDetails ? `` : `p-4 md:p-6`}`}
-    >
+    <div className={`rounded-lg ${inAccountDetails ? `` : `p-4 md:p-6`}`}>
       <TokenBalanceCardInner inAccountDetails={inAccountDetails} />
       <SelectPrimaryDelegators />
       <GovernanceTokenSwap></GovernanceTokenSwap>

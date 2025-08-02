@@ -15,7 +15,7 @@
   --green: theme('colors.dark-theme.green');
   --orange: theme('colors.dark-theme.orange');
   --blue: theme('colors.dark-theme.blue');
-  --bkg-1: theme('colors.dark-theme.bkg-1');
+  --bkg-1: rgb(17, 24, 39);
   --bkg-2: theme('colors.dark-theme.bkg-2');
   --bkg-3: theme('colors.dark-theme.bkg-3');
   --bkg-4: theme('colors.dark-theme.bkg-4');
@@ -25,7 +25,7 @@
   --fgd-3: theme('colors.dark-theme.fgd-3');
   --fgd-4: theme('colors.dark-theme.fgd-4');
   --discord: theme('colors.dark-theme.discord');
-  --bg-primary: rgb(17 24 39);
+  --bg-primary: rgb(17, 24, 39);
 
   /* Navbar Theme Colors */
   --neonBlue: #00d4ff;
