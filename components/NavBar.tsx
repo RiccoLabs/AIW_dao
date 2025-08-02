@@ -58,6 +58,7 @@ interface NavItemProps {
   activePage: string
   index: number
   isDark: boolean
+  isDAOSelected?: boolean
 }
 
 interface NavbarProps {
@@ -74,6 +75,7 @@ const NavItem: React.FC<NavItemProps> = ({
   activePage,
   index,
   isDark,
+  isDAOSelected = false,
 }) => {
   const menuRef = useRef<HTMLDivElement>(null)
   const [openSubMenu, setOpenSubMenu] = useState<string | null>(null)
@@ -85,11 +87,13 @@ const NavItem: React.FC<NavItemProps> = ({
   }, [router.pathname])
 
   // Check if any of the subitems match the active page
-  const isActiveParent = items?.some(
-    (item) =>
-      item.path === activePage ||
-      item.subItems?.some((subItem) => subItem.path === activePage),
-  )
+  const isActiveParent =
+    items?.some(
+      (item) =>
+        item.path === activePage ||
+        item.subItems?.some((subItem) => subItem.path === activePage),
+    ) ||
+    (title === 'Program' && isDAOSelected) // Show Program as active when DAO is selected
 
   const handleSubMenuToggle = (e: React.MouseEvent, path: string) => {
     e.stopPropagation()
@@ -212,18 +216,26 @@ const NavItem: React.FC<NavItemProps> = ({
                   </div>
                 ) : (
                   <button
-                    onClick={() => onNavigate(item.path)}
+                    onClick={() => {
+                      if (item.path !== '#') {
+                        onNavigate(item.path)
+                      }
+                    }}
                     className={`block w-full text-left px-4 py-2.5 text-sm font-semibold ${
-                      activePage === item.path
+                      activePage === item.path ||
+                      (item.name === 'DAO' && isDAOSelected)
                         ? 'bg-neonBlue/10 text-neonBlue'
                         : isDark
                         ? 'text-gray-300 hover:bg-gray-600 hover:text-neonBlue'
                         : 'text-grayBlue hover:bg-gray-200 hover:text-neonBlue'
-                    } flex items-center`}
+                    } flex items-center ${
+                      item.path === '#' ? 'cursor-default' : 'cursor-pointer'
+                    }`}
                   >
                     <span
                       className={`mr-2 ${
-                        activePage === item.path
+                        activePage === item.path ||
+                        (item.name === 'DAO' && isDAOSelected)
                           ? 'text-neonBlue'
                           : 'text-neonBlue'
                       }`}
@@ -334,6 +346,9 @@ const Navbar: React.FC<NavbarProps> = ({ currentTheme }) => {
     setActivePage(path)
   }, [router.pathname])
 
+  // Set DAO as selected for Program menu
+  const isDAOSelected = true // Always show DAO as selected
+
   // Define your navigation items here
   const navItems = [
     {
@@ -381,7 +396,7 @@ const Navbar: React.FC<NavbarProps> = ({ currentTheme }) => {
         },
         {
           name: 'DAO',
-          path: routes[6],
+          path: '#', // Disabled route
           icon: <Landmark className="h-3 w-3" />,
         },
         {
@@ -392,7 +407,7 @@ const Navbar: React.FC<NavbarProps> = ({ currentTheme }) => {
         {
           name: 'Whitelist',
           path: routes[8],
-        icon: <BadgeCheck className="h-3 w-3" />,
+          icon: <BadgeCheck className="h-3 w-3" />,
         },
       ],
     },
@@ -656,6 +671,9 @@ const Navbar: React.FC<NavbarProps> = ({ currentTheme }) => {
                   activePage={activePage}
                   index={index}
                   isDark={mounted ? isDark : false}
+                  isDAOSelected={
+                    item.title === 'Program' ? isDAOSelected : false
+                  }
                 />
               ))}
             </div>
@@ -782,6 +800,26 @@ const Navbar: React.FC<NavbarProps> = ({ currentTheme }) => {
                               </Link>
                             ),
                           )}
+                        </div>
+                      </div>
+                    ) : subItem.path === '#' ? (
+                      <div
+                        className={`flex items-center px-3 py-1 rounded-md text-sm ${
+                          isPathActive(subItem.path) ||
+                          (subItem.name === 'DAO' && isDAOSelected)
+                            ? 'bg-neonBlue/10 text-neonBlue'
+                            : 'text-fgd-3'
+                        } cursor-default`}
+                      >
+                        <div className="flex items-center">
+                          <span className="mr-2 text-lg">
+                            {subItem.emoji ? (
+                              <span aria-hidden="false">{subItem.emoji}</span>
+                            ) : (
+                              <span aria-hidden="true">{subItem.icon}</span>
+                            )}
+                          </span>
+                          <span>{subItem.name}</span>
                         </div>
                       </div>
                     ) : (
