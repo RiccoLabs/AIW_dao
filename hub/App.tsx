@@ -2,6 +2,7 @@ import Head from 'next/head';
 import { useRouter } from 'next/router';
 import Script from 'next/script';
 import React, { useEffect } from 'react';
+import { useTheme } from 'next-themes';
 
 import { GlobalHeader } from '@hub/components/GlobalHeader';
 import { MinimalHeader } from '@hub/components/GlobalHeader/MinimalHeader';
@@ -58,11 +59,13 @@ interface Props {
 
 export function App(props: Props) {
   const router = useRouter();
+  const { theme } = useTheme();
   const isDarkMode =
     router.pathname.startsWith('/realm/[id]/governance') ||
     router.pathname.startsWith('/realm/[id]/config');
 
   useEffect(() => {
+    // Only force dark mode for specific routes, otherwise respect theme
     if (isDarkMode) {
       document.documentElement.classList.add('dark');
     } else {
@@ -78,7 +81,9 @@ export function App(props: Props) {
             dangerouslySetInnerHTML={{
               __html: `
                 html {
-                  background-color: #171717;
+                  background-color: ${
+                    theme === 'Light' ? '#ffffff' : '#171717'
+                  };
                 }
               `,
             }}

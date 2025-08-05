@@ -12,7 +12,7 @@ const NFTSCompactWrapper = () => {
   const { symbol } = useRouter().query
   const { fmtUrlWithCluster } = useQueryContext()
   return nftsCount > 0 ? (
-    <div className="bg-bkg-2 p-4 md:p-6 rounded-lg transition-all">
+    <div className="p-4 md:p-6 rounded-lg transition-all">
       <div className="flex items-center justify-between">
         <h3 className="mb-0">NFTs</h3>
         <Link href={fmtUrlWithCluster(`/dao/${symbol}/gallery`)}>

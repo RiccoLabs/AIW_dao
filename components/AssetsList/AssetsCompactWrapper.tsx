@@ -19,7 +19,7 @@ const AssetsCompactWrapper = () => {
   return programGovernances.length < 1 ? (
     <></>
   ) : (
-    <div className="bg-bkg-2 p-4 md:p-6 rounded-lg">
+    <div className="p-4 md:p-6 rounded-lg">
       <div className="flex items-center justify-between pb-4">
         <h3 className="mb-0">Programs</h3>
 

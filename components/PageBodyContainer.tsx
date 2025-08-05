@@ -15,7 +15,7 @@ const PageBodyContainer = ({ children }) => {
   return (
     <>
       <div
-        className={`grid grid-cols-12 gap-4 pt-4 ${
+        className={`grid grid-cols-12 gap-4 pt-4 bg-bkg-1 ${
           isNewRealmsWizard ? '' : 'min-h-[calc(100vh_-_80px)] pb-12 sm:pb-64'
         }`}
       >

@@ -9,7 +9,7 @@ import { VSR_PLUGIN_PKS } from '@constants/plugins'
 import ErrorBoundary from '@components/ErrorBoundary'
 import useHandleGovernanceAssetsStore from '@hooks/handleGovernanceAssetsStore'
 import handleRouterHistory from '@hooks/handleRouterHistory'
-import NavBar from '@components/NavBar'
+import Navbar from '@components/NavBar'
 import PageBodyContainer from '@components/PageBodyContainer'
 import tokenPriceService from '@utils/services/tokenPrice'
 import TransactionLoader from '@components/TransactionLoader'
@@ -17,7 +17,6 @@ import useDepositStore from 'VoteStakeRegistry/stores/useDepositStore'
 import useRealm from '@hooks/useRealm'
 import { DefiProvider } from '@hub/providers/Defi'
 import NftVotingCountingModal from '@components/NftVotingCountingModal'
-import { getResourcePathPart } from '@tools/core/resources'
 import useSerumGovStore from 'stores/useSerumGovStore'
 import useWalletOnePointOh from '@hooks/useWalletOnePointOh'
 import { useUserCommunityTokenOwnerRecord } from '@hooks/queries/tokenOwnerRecord'
@@ -35,13 +34,11 @@ import {
   detectEmbeddedInSquadsIframe,
 } from '@sqds/iframe-adapter'
 import { WALLET_PROVIDERS } from '@utils/wallet-adapters'
-import { tryParsePublicKey } from '@tools/core/pubkey'
-import { useAsync } from 'react-async-hook'
 import { useVsrClient } from '../VoterWeightPlugins/useVsrClient'
 import { useRealmVoterWeightPlugins } from '@hooks/useRealmVoterWeightPlugins'
-import TermsPopupModal from './TermsPopup'
 import PlausibleProvider from 'next-plausible'
 import AIWGovernanceHeader from './AIWGovernanceHeader'
+import FloatingThemeSwitch from './FloatingThemeSwitch'
 import { useLegacyVoterWeight } from '@hooks/queries/governancePower'
 import { useMintInfoByPubkeyQuery } from '@hooks/queries/mintInfo'
 import {
@@ -190,72 +187,7 @@ export function AppContents(props: Props) {
   )
   const { vsrClient } = useVsrClient()
 
-  const realmName = realmInfo?.displayName ?? realm?.account?.name
-  const title = realmName ? `${realmName}` : 'AIW DAO'
-
-  // Note: ?v==${Date.now()} is added to the url to force favicon refresh.
-  // Without it browsers would cache the last used and won't change it for different realms
-  // https://stackoverflow.com/questions/2208933/how-do-i-force-a-favicon-refresh
-
-  const faviconUrl = useMemo(() => {
-    const symbol = router.query.symbol
-
-    if (!symbol || tryParsePublicKey(symbol as string) !== undefined) {
-      return null
-    }
-    if (!isValidSymbol(symbol)) {
-      console.error('Invalid symbol')
-      return null
-    }
-
-    const resourcePath = getResourcePathPart(symbol as string)
-    const fullUrl = `${
-      window.location.origin
-    }/realms/${resourcePath}/favicon.ico?v=${Date.now()}`
-
-    // Check if the domain is in the allow list
-    try {
-      const urlObject = new URL(fullUrl)
-      if (!allowedDomains.includes(urlObject.origin)) {
-        console.error('Domain not in allowed list')
-        return null
-      }
-      // Check if the path is in the allow list
-      if (
-        !allowedFaviconPaths.some((path) => urlObject.pathname.startsWith(path))
-      ) {
-        console.error('Path not in allowed list')
-        return null
-      }
-
-      return urlObject.href
-    } catch (error) {
-      console.error('Invalid URL:', error)
-      return null
-    }
-  }, [router.query.symbol])
-
-  // Validate it's an ico file
-  function isValidSymbol(symbol) {
-    return (
-      typeof symbol === 'string' &&
-      symbol.trim() !== '' &&
-      /^[a-zA-Z0-9-_]+$/.test(symbol)
-    )
-  }
-  const { result: faviconExists } = useAsync(async () => {
-    if (!faviconUrl) {
-      return false
-    }
-
-    try {
-      const response = await fetch(faviconUrl)
-      return response.status === 200
-    } catch (error) {
-      console.error('Error fetching favicon:', error)
-      return false
-    }
-  }, [faviconUrl])
+  const title = 'AIW - Decentralized Finance Platform'
 
   useEffect(() => {
     if (
@@ -292,100 +224,28 @@ export function AppContents(props: Props) {
   }, [cluster, updateSerumGovAccounts])
 
   return (
-    <div className="relative bg-gray-900 text-fgd-1 min-h-screen">
+    <div
+      className="relative text-fgd-1 min-h-screen"
+      style={{ backgroundColor: 'var(--bg-primary)' }}
+    >
       <Head>
         <meta property="og:title" content={title} key="title" />
         <title>{title}</title>
         <style>{`
           body {
-            background-color: rgb(17 24 39);
+            background-color: var(--bg-primary);
             min-height: 100vh;
           }
         `}</style>
-        {faviconUrl && faviconExists ? (
-          <>
-            <link rel="icon" href={faviconUrl} />
-          </>
-        ) : (
-          <>
-            <link
-              rel="apple-touch-icon"
-              sizes="57x57"
-              href="/favicons/apple-icon-57x57.png"
-            />
-            <link
-              rel="apple-touch-icon"
-              sizes="60x60"
-              href="/favicons/apple-icon-60x60.png"
-            />
-            <link
-              rel="apple-touch-icon"
-              sizes="72x72"
-              href="/favicons/apple-icon-72x72.png"
-            />
-            <link
-              rel="apple-touch-icon"
-              sizes="76x76"
-              href="/favicons/apple-icon-76x76.png"
-            />
-            <link
-              rel="apple-touch-icon"
-              sizes="114x114"
-              href="/favicons/apple-icon-114x114.png"
-            />
-            <link
-              rel="apple-touch-icon"
-              sizes="120x120"
-              href="/favicons/apple-icon-120x120.png"
-            />
-            <link
-              rel="apple-touch-icon"
-              sizes="144x144"
-              href="/favicons/apple-icon-144x144.png"
-            />
-            <link
-              rel="apple-touch-icon"
-              sizes="152x152"
-              href="/favicons/apple-icon-152x152.png"
-            />
-            <link
-              rel="apple-touch-icon"
-              sizes="180x180"
-              href="/favicons/apple-icon-180x180.png"
-            />
-            <link
-              rel="icon"
-              type="image/png"
-              sizes="192x192"
-              href="/favicons/android-icon-192x192.png"
-            />
-            <link
-              rel="icon"
-              type="image/png"
-              sizes="32x32"
-              href="/favicons/favicon-32x32.png"
-            />
-            <link
-              rel="icon"
-              type="image/png"
-              sizes="96x96"
-              href="/favicons/favicon-96x96.png"
-            />
-            <link
-              rel="icon"
-              type="image/png"
-              sizes="16x16"
-              href="/favicons/favicon-16x16.png"
-            />
-          </>
-        )}
       </Head>
       <GoogleTag />
       <ErrorBoundary>
         <ThemeProvider defaultTheme="Dark">
           <GatewayProvider>
             <Telemetry></Telemetry>
-            <NavBar />
+            <Navbar />
+            {/* Spacer to prevent content from being hidden behind fixed navbar */}
+            <div className="h-20"></div>
             {realm && (
               <AIWGovernanceHeader
                 governancePower={governancePower}
@@ -398,7 +258,7 @@ export function AppContents(props: Props) {
             <PageBodyContainer>
               <DefiProvider>{props.children}</DefiProvider>
             </PageBodyContainer>
-            <TermsPopupModal />
+            <FloatingThemeSwitch />
           </GatewayProvider>
         </ThemeProvider>
       </ErrorBoundary>

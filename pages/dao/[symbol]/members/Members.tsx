@@ -43,7 +43,7 @@ const Members = () => {
 
   const { connection } = useConnection()
   const realmPk = useSelectedRealmPubkey()
-  const { data: activeMembers } = useMembersQuery();
+  const { data: activeMembers } = useMembersQuery()
 
   const { result: kind } = useAsync(async () => {
     if (realmPk === undefined) return undefined
@@ -212,16 +212,17 @@ const Members = () => {
                 placeholder="Please select..."
                 value={activeMember?.walletAddress}
               >
-                {Array.isArray(activeMembers) && activeMembers?.map((x) => {
-                  return (
-                    <Select.Option
-                      key={x?.walletAddress}
-                      value={x?.walletAddress}
-                    >
-                      {x?.walletAddress}
-                    </Select.Option>
-                  )
-                })}
+                {Array.isArray(activeMembers) &&
+                  activeMembers?.map((x) => {
+                    return (
+                      <Select.Option
+                        key={x?.walletAddress}
+                        value={x?.walletAddress}
+                      >
+                        {x?.walletAddress}
+                      </Select.Option>
+                    )
+                  })}
               </Select>
             </div>
             <div className="hidden lg:block">

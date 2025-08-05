@@ -10,6 +10,7 @@ module.exports = {
     './VoteStakeRegistry/**/*.{js,ts,jsx,tsx}',
     './hub/**/*.{js,ts,jsx,tsx}',
     './verify-wallet/**/*.{js,ts,jsx,tsx}',
+    './src/**/*.{js,ts,jsx,tsx}', // Add this for the navbar component
   ],
   future: {
     removeDeprecatedGapUtilities: true,
@@ -27,6 +28,15 @@ module.exports = {
         help: 'help',
       },
       colors: {
+        // Navbar-specific colors
+        neonBlue: '#00C6FF',
+        cyberPink: '#FF00FF',
+        darkPurple: '#FFFFFF',
+        grayBlue: '#6B7280',
+        lightGray: '#F3F4F6',
+        mediumGray: '#E5E7EB',
+        darkGray: '#374151',
+        
         discord: '#7289da',
         'dark-theme': {
           primary: { light: '#5DC9EB', dark: '#cecece' },
@@ -149,6 +159,12 @@ module.exports = {
         'blue-900': '#1e3a8a',
       },
       animation: {
+        // Navbar-specific animations
+        'pulse-glow': 'pulse-glow 2s infinite',
+        'float': 'float 3s ease-in-out infinite',
+        'loading-bar': 'loading-bar 2s ease-in-out infinite',
+        
+        // Existing animations
         'connect-wallet-ping':
           'connect-wallet-ping 1.5s cubic-bezier(0, 0, 0.2, 1) infinite',
         gradient: 'gradient 4s ease-in-out infinite',
@@ -157,6 +173,25 @@ module.exports = {
         'move-stripes': 'move-stripes 2s linear infinite',
       },
       keyframes: {
+        // Navbar-specific keyframes
+        'pulse-glow': {
+          '0%, 100%': { 
+            boxShadow: '0 0 5px rgba(0, 198, 255, 0.5), 0 0 10px rgba(0, 198, 255, 0.3)' 
+          },
+          '50%': { 
+            boxShadow: '0 0 15px rgba(0, 198, 255, 0.8), 0 0 20px rgba(0, 198, 255, 0.5)' 
+          },
+        },
+        'float': {
+          '0%, 100%': { transform: 'translateY(0)' },
+          '50%': { transform: 'translateY(-10px)' },
+        },
+        'loading-bar': {
+          '0%': { width: '0%' },
+          '100%': { width: '100%' }
+        },
+        
+        // Existing keyframes
         'connect-wallet-ping': {
           '75%, 100%': {
             transform: 'scale(1.06, 1.3)',

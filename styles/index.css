@@ -15,7 +15,7 @@
   --green: theme('colors.dark-theme.green');
   --orange: theme('colors.dark-theme.orange');
   --blue: theme('colors.dark-theme.blue');
-  --bkg-1: theme('colors.dark-theme.bkg-1');
+  --bkg-1: rgb(17, 24, 39);
   --bkg-2: theme('colors.dark-theme.bkg-2');
   --bkg-3: theme('colors.dark-theme.bkg-3');
   --bkg-4: theme('colors.dark-theme.bkg-4');
@@ -25,6 +25,14 @@
   --fgd-3: theme('colors.dark-theme.fgd-3');
   --fgd-4: theme('colors.dark-theme.fgd-4');
   --discord: theme('colors.dark-theme.discord');
+  --bg-primary: rgb(17, 24, 39);
+
+  /* Navbar Theme Colors */
+  --neonBlue: #00d4ff;
+  --darkGray: #374151;
+  --mediumGray: #e5e7eb;
+  --lightGray: #f3f4f6;
+  --grayBlue: #6b7280;
 }
 
 [data-theme='Light'] {
@@ -48,6 +56,7 @@
   --fgd-3: theme('colors.light-theme.fgd-3');
   --fgd-4: theme('colors.light-theme.fgd-4');
   --discord: theme('colors.light-theme.discord');
+  --bg-primary: #ffffff;
 }
 
 /* base */
@@ -58,6 +67,8 @@
 
 body {
   @apply text-base tracking-wide font-body;
+  background-color: var(--bg-primary);
+  transition: background-color 0.3s ease;
 }
 
 h1 {

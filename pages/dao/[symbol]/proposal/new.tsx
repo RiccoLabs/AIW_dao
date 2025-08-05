@@ -638,8 +638,8 @@ const New = () => {
       [Instructions.SymmetryEditBasket]: SymmetryEditBasket,
       [Instructions.SymmetryDeposit]: SymmetryDeposit,
       [Instructions.SymmetryWithdraw]: SymmetryWithdraw,
-      [Instructions.CollectPoolFees]: CollectPoolFees ,
-      [Instructions.CollectVestedTokens]: CollectVestedTokens
+      [Instructions.CollectPoolFees]: CollectPoolFees,
+      [Instructions.CollectVestedTokens]: CollectVestedTokens,
     }),
     [governance?.pubkey?.toBase58()],
   )
