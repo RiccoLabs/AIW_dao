@@ -104,7 +104,6 @@ export function App(props: Props) {
   )
 }
 
-const allowedFaviconPaths = ['/realms/']
 const allowedDomains = [
   'https://app.realms.today',
   'http://localhost',

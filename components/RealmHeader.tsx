@@ -10,6 +10,7 @@ import { tryParsePublicKey } from '@tools/core/pubkey'
 import { useRealmQuery } from '@hooks/queries/realm'
 import { useConnection } from '@solana/wallet-adapter-react'
 import { useGetOnchainMetadata } from '@hooks/useOnchainMetadata'
+import Button from '@components/Button'
 
 const RealmHeader = () => {
   const { fmtUrlWithCluster } = useQueryContext()

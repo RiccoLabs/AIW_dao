@@ -100,23 +100,11 @@ const ConnectWalletButton = (props) => {
     <div className="flex">
       <div
         disabled={connected}
-        className={`flex items-center ${
+        className={`flex items-center bg-neon-gradient text-white px-3 py-1 text-sm font-medium rounded-md transition-all duration-300 ${
           connected
             ? 'cursor-default'
             : 'cursor-pointer hover:shadow-lg focus:outline-none'
         }`}
-        style={{
-          background: 'linear-gradient(to right, #00C6FF, #FF00FF)',
-          color: 'white',
-          padding: '0.125rem 0.75rem',
-          fontSize: '0.875rem',
-          borderRadius: '0.375rem',
-          fontWeight: '500',
-          transition: 'all 0.3s',
-          lineHeight: '1.25rem',
-          height: '1.75rem',
-          minHeight: '1.75rem',
-        }}
         onClick={handleConnectDisconnect}
         {...props}
       >
