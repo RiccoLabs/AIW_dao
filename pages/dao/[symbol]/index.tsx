@@ -57,6 +57,7 @@ import { useNftClient } from '../../../VoterWeightPlugins/useNftClient'
 import { useVotingClients } from '@hooks/useVotingClients'
 import { useRealmVoterWeightPlugins } from '@hooks/useRealmVoterWeightPlugins'
 import { useGetOnchainMetadata } from '@hooks/useOnchainMetadata'
+import ApplyForProjectModal from '@components/ApplyForProjectModal'
 
 const AccountsCompactWrapper = dynamic(
   () => import('@components/TreasuryAccount/AccountsCompactWrapper'),
@@ -96,6 +97,19 @@ const REALM = () => {
   const [selectedProposals, setSelectedProposals] = useState<
     SelectedProposal[]
   >([])
+  const [showApplyModal, setShowApplyModal] = useState(false)
+
+  // Listen for apply modal event from RealmHeader
+  useEffect(() => {
+    const handleOpenApplyModal = () => {
+      setShowApplyModal(true)
+    }
+
+    window.addEventListener('openApplyModal', handleOpenApplyModal)
+    return () => {
+      window.removeEventListener('openApplyModal', handleOpenApplyModal)
+    }
+  }, [])
 
   const votingClients = useVotingClients()
   const { nftClient } = useNftClient()
@@ -423,6 +437,7 @@ const REALM = () => {
             >
               <RealmHeader />
               <div className="p-4 md:p-6 rounded-lg bg-bkg-2">
+           
                 <div>
                   {realmInfo?.bannerImage || realmData?.bannerImage ? (
                     <>
@@ -561,6 +576,11 @@ const REALM = () => {
           <>Realm not found</>
         )}
       </div>
+
+      <ApplyForProjectModal
+        isOpen={showApplyModal}
+        onClose={() => setShowApplyModal(false)}
+      />
     </>
   )
 }

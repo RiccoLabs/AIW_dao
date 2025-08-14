@@ -151,7 +151,12 @@ const AIWGovernanceHeader: React.FC<AIWGovernanceHeaderProps> = ({
                   </p>
                 </div>
               </div>
-              <button className="px-6 py-2 border border-blue-400 text-blue-400 rounded-lg hover:bg-blue-400 hover:text-white transition-colors flex items-center space-x-2">
+              <button
+                onClick={() =>
+                  window.dispatchEvent(new CustomEvent('openApplyModal'))
+                }
+                className="px-6 py-2 border border-blue-400 text-blue-400 rounded-lg hover:bg-blue-400 hover:text-white transition-colors flex items-center space-x-2"
+              >
                 <span>Apply for Project Listing</span>
                 <svg
                   className="w-4 h-4"
@@ -213,7 +218,11 @@ const AIWGovernanceHeader: React.FC<AIWGovernanceHeaderProps> = ({
                 <button
                   onClick={handleStakeMoreClick}
                   disabled={!connected || availableTokens <= 0}
-                  className="w-full bg-gradient-to-r from-blue-400 to-purple-500 text-white py-3 px-4 rounded-lg font-medium hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
+                  className={`w-full py-3 px-4 rounded-lg font-medium transition-opacity disabled:cursor-not-allowed ${
+                    !connected || availableTokens <= 0
+                      ? 'bg-neon-gradient text-white opacity-50'
+                      : 'bg-neon-gradient text-white hover:opacity-90'
+                  }`}
                 >
                   Stake More AIW
                 </button>

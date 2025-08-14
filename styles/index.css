@@ -29,6 +29,7 @@
 
   /* Navbar Theme Colors */
   --neonBlue: #00d4ff;
+  --cyberPink: #ff00ff;
   --darkGray: #374151;
   --mediumGray: #e5e7eb;
   --lightGray: #f3f4f6;
@@ -286,6 +287,10 @@ body::-webkit-scrollbar-corner {
 
 .bg-brand-gradient {
   @apply bg-gradient-to-r from-[#00C2FF] via-[#00E4FF] to-[#87F2FF];
+}
+
+.bg-neon-gradient {
+  background: linear-gradient(to right, #00d4ff, #ff00ff);
 }
 
 .transition-from-gradient-background::before {
