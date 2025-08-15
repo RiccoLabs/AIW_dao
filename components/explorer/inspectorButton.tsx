@@ -1,4 +1,4 @@
-image.pngimport { dryRunInstruction } from '../../actions/dryRunInstruction'
+import { dryRunInstruction } from '../../actions/dryRunInstruction'
 import {
   InstructionExecutionStatus,
   ProgramAccount,
