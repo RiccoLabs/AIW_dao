@@ -1,6 +1,7 @@
 
 // Route configuration
-const BASE_PATH = process.env.NEXT_PUBLIC_BASE_PATH || ''
+const BASE_PATH = process.env.NEXT_PUBLIC_BASE_PATH
+export const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL 
 
 export const routes = [
     `${BASE_PATH}/`,
