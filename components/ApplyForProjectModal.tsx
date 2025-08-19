@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import Button from '@components/Button'
 import Input from '@components/inputs/Input'
 import { notify } from '@utils/notifications'
+import { API_BASE_URL } from '../env'
 
 interface ApplyForProjectModalProps {
   isOpen: boolean
@@ -30,7 +31,7 @@ const ApplyForProjectModal: React.FC<ApplyForProjectModalProps> = ({
     try {
       // Send application to backend
       const response = await fetch(
-        'http://localhost:8080/api/investment-applications',
+        `${API_BASE_URL}/api/investment-applications`,
         {
           method: 'POST',
           headers: {

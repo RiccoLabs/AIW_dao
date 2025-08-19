@@ -40,10 +40,7 @@ import {
   useUserCouncilTokenOwnerRecord,
 } from '@hooks/queries/tokenOwnerRecord'
 import { useRealmQuery } from '@hooks/queries/realm'
-import {
-  useRealmCommunityMintInfoQuery,
-  useRealmCouncilMintInfoQuery,
-} from '@hooks/queries/mintInfo'
+// Removed mint info queries to reduce API calls
 import { useRealmGovernancesQuery } from '@hooks/queries/governance'
 import { useConnection } from '@solana/wallet-adapter-react'
 import {
@@ -56,33 +53,63 @@ import { createComputeBudgetIx } from '@blockworks-foundation/mango-v4'
 import { useNftClient } from '../../../VoterWeightPlugins/useNftClient'
 import { useVotingClients } from '@hooks/useVotingClients'
 import { useRealmVoterWeightPlugins } from '@hooks/useRealmVoterWeightPlugins'
-import { useGetOnchainMetadata } from '@hooks/useOnchainMetadata'
 import ApplyForProjectModal from '@components/ApplyForProjectModal'
 
 const AccountsCompactWrapper = dynamic(
   () => import('@components/TreasuryAccount/AccountsCompactWrapper'),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="animate-pulse bg-bkg-3 h-64 rounded-lg w-full" />
+    ),
+  },
 )
 const AssetsCompactWrapper = dynamic(
   () => import('@components/AssetsList/AssetsCompactWrapper'),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="animate-pulse bg-bkg-3 h-64 rounded-lg w-full" />
+    ),
+  },
 )
 const NFTSCompactWrapper = dynamic(
   () => import('@components/NFTS/NFTSCompactWrapper'),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="animate-pulse bg-bkg-3 h-64 rounded-lg w-full" />
+    ),
+  },
 )
-const ProposalCard = dynamic(() => import('components/ProposalCard'))
-const RealmHeader = dynamic(() => import('components/RealmHeader'))
+const ProposalCard = dynamic(() => import('components/ProposalCard'), {
+  ssr: false,
+  loading: () => (
+    <div className="animate-pulse bg-bkg-3 h-32 rounded-lg w-full" />
+  ),
+})
+const RealmHeader = dynamic(() => import('components/RealmHeader'), {
+  ssr: false,
+  loading: () => (
+    <div className="animate-pulse bg-bkg-3 h-16 rounded-lg w-full" />
+  ),
+})
 const DepositLabel = dynamic(
   () => import('@components/TreasuryAccount/DepositLabel'),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="animate-pulse bg-bkg-3 h-8 rounded-lg w-full" />
+    ),
+  },
 )
 
 const REALM = () => {
   const pagination = useRef<{ setPage: (val) => void }>(null)
-  const ownTokenRecord = useUserCommunityTokenOwnerRecord().data?.result
-  const ownCouncilTokenRecord = useUserCouncilTokenOwnerRecord().data?.result
+  // Removed token owner record queries to reduce API calls - only load when needed for voting
   const realmQuery = useRealmQuery()
-  const mint = useRealmCommunityMintInfoQuery().data?.result
-  const councilMint = useRealmCouncilMintInfoQuery().data?.result
+  // Removed mint queries to reduce API calls and focus on proposals
   const { realmInfo } = useRealm()
-  const realmData = useGetOnchainMetadata(realmInfo?.realmId).data
   const proposalsPerPage = 20
   const [filters, setFilters] = useState<Filters>(InitialFilters)
   const [sorting, setSorting] = useState<Sorting>(InitialSorting)
@@ -111,10 +138,46 @@ const REALM = () => {
     }
   }, [])
 
-  const votingClients = useVotingClients()
-  const { nftClient } = useNftClient()
   const wallet = useWalletOnePointOh()
   const { connection } = useConnection()
+
+  // Only load voting clients when actually needed for voting
+  const [votingClients, setVotingClients] = useState<any>(null)
+  const [nftClient, setNftClient] = useState<any>(null)
+
+  // Load voting clients only when entering multi-vote mode
+  useEffect(() => {
+    if (multiVoteMode) {
+      import('@hooks/useVotingClients').then(({ useVotingClients }) => {
+        setVotingClients(useVotingClients())
+      })
+      import('../../../VoterWeightPlugins/useNftClient').then(
+        ({ useNftClient }) => {
+          setNftClient(useNftClient())
+        },
+      )
+    }
+  }, [multiVoteMode])
+
+  // Load token owner records when needed for voting
+  const [ownTokenRecord, setOwnTokenRecord] = useState<any>(null)
+  const [ownCouncilTokenRecord, setOwnCouncilTokenRecord] = useState<any>(null)
+
+  useEffect(() => {
+    if (multiVoteMode) {
+      import('@hooks/queries/tokenOwnerRecord').then(
+        ({
+          useUserCommunityTokenOwnerRecord,
+          useUserCouncilTokenOwnerRecord,
+        }) => {
+          setOwnTokenRecord(useUserCommunityTokenOwnerRecord().data?.result)
+          setOwnCouncilTokenRecord(
+            useUserCouncilTokenOwnerRecord().data?.result,
+          )
+        },
+      )
+    }
+  }, [multiVoteMode])
 
   const governancesArray = useRealmGovernancesQuery().data
   const governancesByGovernance = useMemo(
@@ -134,6 +197,7 @@ const REALM = () => {
     [proposalsArray],
   )
 
+  // Prioritize proposals loading - this ensures proposals are shown first
   const allProposals = useMemo(
     () =>
       governancesByGovernance !== undefined && proposalsByProposal !== undefined
@@ -188,8 +252,8 @@ const REALM = () => {
       sorting,
       realmQuery.data?.result,
       governancesByGovernance ?? {},
-      councilMint,
-      mint,
+      undefined, // councilMint - removed to reduce API calls
+      undefined, // mint - removed to reduce API calls
     )
 
     if (proposalSearch) {
@@ -202,10 +266,8 @@ const REALM = () => {
     return proposals
   }, [
     allProposals,
-    councilMint,
     filters,
     governancesByGovernance,
-    mint,
     multiVoteMode,
     proposalSearch,
     realmQuery.data?.result,
@@ -239,17 +301,10 @@ const REALM = () => {
     }
   }, [])
 
-  const { ownVoterWeight: communityOwnVoterWeight } =
-    useRealmVoterWeightPlugins('community')
-  const { ownVoterWeight: councilOwnVoterWeight } =
-    useRealmVoterWeightPlugins('council')
-
   const allVotingProposalsSelected =
     selectedProposals.length === votingProposals?.length
-  const hasCommunityVoteWeight =
-    ownTokenRecord && communityOwnVoterWeight?.value?.gtn(0)
-  const hasCouncilVoteWeight =
-    ownCouncilTokenRecord && councilOwnVoterWeight?.value?.gtn(0)
+  const hasCommunityVoteWeight = ownTokenRecord
+  const hasCouncilVoteWeight = ownCouncilTokenRecord
 
   const cantMultiVote =
     selectedProposals.length === 0 ||
@@ -286,6 +341,7 @@ const REALM = () => {
       const transactions: Transaction[] = []
       for (let i = 0; i < selectedProposals.length; i++) {
         const selectedProposal = selectedProposals[i]
+        // Simplified token record logic - removed complex queries to reduce API calls
         const relevantTokenRecord =
           selectedProposal.proposal.governingTokenMint.toBase58() ===
           realm.account.communityMint.toBase58()
@@ -303,15 +359,18 @@ const REALM = () => {
         const instructions: TransactionInstruction[] = []
 
         //will run only if plugin is connected with realm
-        const plugin = await votingClients(role)?.withCastPluginVote(
-          instructions,
-          {
-            account: selectedProposal.proposal,
-            pubkey: selectedProposal.proposalPk,
-            owner: realm.pubkey,
-          },
-          relevantTokenRecord.pubkey,
-        )
+        const plugin =
+          votingClients && relevantTokenRecord
+            ? await votingClients(role)?.withCastPluginVote(
+                instructions,
+                {
+                  account: selectedProposal.proposal,
+                  pubkey: selectedProposal.proposalPk,
+                  owner: realm.pubkey,
+                },
+                relevantTokenRecord.pubkey,
+              )
+            : null
         if (!nftClient) {
           await withCastVote(
             instructions,
@@ -437,28 +496,19 @@ const REALM = () => {
             >
               <RealmHeader />
               <div className="p-4 md:p-6 rounded-lg bg-bkg-2">
-           
                 <div>
-                  {realmInfo?.bannerImage || realmData?.bannerImage ? (
-                    <>
-                      <img
-                        className="mb-10"
-                        src={realmData?.bannerImage || realmInfo?.bannerImage}
-                      ></img>
-                      {/* temp. setup for Ukraine.SOL */}
-                      {realmInfo?.sharedWalletId && (
-                        <div>
-                          <div className="mb-10">
-                            <DepositLabel
-                              abbreviatedAddress={false}
-                              header="Wallet Address"
-                              transferAddress={realmInfo.sharedWalletId}
-                            ></DepositLabel>
-                          </div>
-                        </div>
-                      )}
-                    </>
-                  ) : null}
+                  {/* Removed banner image to reduce API calls and focus on proposals */}
+                  {realmInfo?.sharedWalletId && (
+                    <div>
+                      <div className="mb-10">
+                        <DepositLabel
+                          abbreviatedAddress={false}
+                          header="Wallet Address"
+                          transferAddress={realmInfo.sharedWalletId}
+                        ></DepositLabel>
+                      </div>
+                    </div>
+                  )}
                 </div>
 
                 <Tabs
@@ -496,9 +546,11 @@ const REALM = () => {
                         className={`flex lg:flex-row items-center justify-between lg:space-x-3 w-full flex-col-reverse`}
                       >
                         <h4 className="font-normal mb-0 text-fgd-2 whitespace-nowrap">
-                          {`${filteredProposals.length} Proposal${
-                            filteredProposals.length === 1 ? '' : 's'
-                          }`}
+                          {proposalsArray === undefined
+                            ? ''
+                            : `${filteredProposals.length} Proposal${
+                                filteredProposals.length === 1 ? '' : 's'
+                              }`}
                         </h4>
                         <div
                           className={`flex items-center lg:justify-end lg:pb-0 lg:space-x-3 w-full justify-between pb-3`}
@@ -517,6 +569,7 @@ const REALM = () => {
                       </div>
                     </div>
                     <div className="space-y-3 rounded-lg p-4 mt-4">
+                      {/* Show proposals immediately when available, even if other data is loading */}
                       {filteredProposals.length > 0 ? (
                         <>
                           {paginatedProposals.map(([k, v]) =>
@@ -546,7 +599,15 @@ const REALM = () => {
                         </>
                       ) : (
                         <div className="bg-bkg-3 px-4 md:px-6 py-4 rounded-lg text-center text-fgd-3">
-                          No proposals found
+                          {/* Show loading state for proposals specifically */}
+                          {proposalsArray === undefined ? (
+                            <div className="flex items-center justify-center space-x-2">
+                              <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-500"></div>
+                              <span>Loading proposals...</span>
+                            </div>
+                          ) : (
+                            'No proposals found'
+                          )}
                         </div>
                       )}
                     </div>
@@ -556,6 +617,7 @@ const REALM = () => {
               </div>
             </div>
             <div className="col-span-12 md:col-span-5 lg:col-span-4 space-y-4">
+              {/* Sidebar components with lower priority loading */}
               <div className="bg-bkg-2 rounded-lg border border-bkg-4 hover:bg-bkg-3 transition-colors">
                 <TokenBalanceCardWrapper />
               </div>
