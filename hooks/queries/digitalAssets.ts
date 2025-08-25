@@ -219,39 +219,105 @@ export const useDigitalAssetById = (id: PublicKey | undefined) => {
   })
 }
 
-const dasByOwnerQueryFn = async (network: Network, owner: PublicKey) => {
-  const url = getHeliusEndpoint(network)
+// const dasByOwnerQueryFn = async (network: Network, owner: PublicKey) => {
+//   const url = getHeliusEndpoint(network)
 
-  // https://docs.helius.xyz/solana-compression/digital-asset-standard-das-api/get-assets-by-owner
+//   // https://docs.helius.xyz/solana-compression/digital-asset-standard-das-api/get-assets-by-owner
+
+//   const PAGE_LIMIT = 1000
+//   const items: DasNftObject[] = []
+//   let moreNftsRemaining = true
+//   let page = 1
+
+//   while (moreNftsRemaining) {
+//     const response = await fetch(url, {
+//       method: 'POST',
+//       headers: {
+//         'Content-Type': 'application/json',
+//       },
+//       body: JSON.stringify({
+//         jsonrpc: '2.0',
+//         id: 'Realms user',
+//         method: 'getAssetsByOwner',
+//         params: {
+//           ownerAddress: owner.toString(),
+//           page, // Starts at 1
+//           limit: PAGE_LIMIT,
+//         },
+//       }),
+//     })
+//     const { result } = await response.json()
+//     const pageItems = result.items as DasNftObject[]
+//     items.push(...pageItems)
+//     page++
+//     if (pageItems.length < PAGE_LIMIT) moreNftsRemaining = false
+//   }
+//   return items
+// }
+
+function getHeliusEndpointSafe(network: 'devnet' | 'mainnet-beta'): string | null {
+  // Read from env
+  const url =
+    network === 'devnet'
+      ? process.env.NEXT_PUBLIC_HELIUS_DEVNET_RPC
+      : process.env.NEXT_PUBLIC_HELIUS_MAINNET_RPC
+
+  if (url && /^https?:\/\//.test(url)) {
+    return url
+  }
+
+  // If env is empty, choose a safe fallback OR return null
+  if (network === 'devnet') {
+    // free/public DAS endpoint (you can change this to your proxy if you like)
+    return 'https://devnet.helius-rpc.com/?api-key=anonymous'
+  }
+  if (network === 'mainnet-beta') {
+    return 'https://mainnet.helius-rpc.com/?api-key=anonymous'
+  }
+
+  return null
+}
+
+export const dasByOwnerQueryFn = async (
+  network: 'devnet' | 'mainnet-beta',
+  owner: PublicKey
+): Promise<DasNftObject[]> => {
+  const url = getHeliusEndpointSafe(network)
+
+  if (!url) {
+    console.warn(`No Helius endpoint configured for ${network}. Skipping DAS query.`)
+    return []
+  }
 
   const PAGE_LIMIT = 1000
   const items: DasNftObject[] = []
-  let moreNftsRemaining = true
   let page = 1
 
-  while (moreNftsRemaining) {
+  // eslint-disable-next-line no-constant-condition
+  while (true) {
     const response = await fetch(url, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         jsonrpc: '2.0',
         id: 'Realms user',
         method: 'getAssetsByOwner',
-        params: {
-          ownerAddress: owner.toString(),
-          page, // Starts at 1
-          limit: PAGE_LIMIT,
-        },
+        params: { ownerAddress: owner.toString(), page, limit: PAGE_LIMIT },
       }),
     })
+
+    if (!response.ok) {
+      throw new Error(`Helius DAS error ${response.status}: ${await response.text()}`)
+    }
+
     const { result } = await response.json()
-    const pageItems = result.items as DasNftObject[]
+    const pageItems = (result?.items ?? []) as DasNftObject[]
     items.push(...pageItems)
+
+    if (pageItems.length < PAGE_LIMIT) break
     page++
-    if (pageItems.length < PAGE_LIMIT) moreNftsRemaining = false
   }
+
   return items
 }
 
