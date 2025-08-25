@@ -65,13 +65,39 @@ export function useWithdrawTokens() {
 
       return new BN(0)
     },
-    onSuccess: async() => {
+    onSuccess: async () => {
       client.resetQueries({
-        queryKey: ['get-token-account', {ata: tokenAccount}]
+        queryKey: ['get-token-account', { ata: tokenAccount }]
       })
       await client.invalidateQueries({
-        queryKey: ['get-token-account', {ata: tokenAccount}]
+        queryKey: ['get-token-account', { ata: tokenAccount }]
       })
+
+      if (realm?.pubkey && pluginMintKey) {
+        client.resetQueries({
+          queryKey: ['getPlugins']
+        })
+        await client.invalidateQueries({
+          queryKey: ['getPlugins']
+        })
+
+        await client.invalidateQueries({
+          queryKey: [realm.pubkey.toString()]
+        })
+      }
+
+      client.resetQueries({
+        queryKey: ['governancePower']
+      })
+      await client.invalidateQueries({
+        queryKey: ['governancePower']
+      })
+
+      if (wallet.publicKey && realm?.pubkey && realm.account.communityMint) {
+        await client.invalidateQueries({
+          queryKey: ['TokenOwnerAddress', [realm.owner, realm.pubkey, realm.account.communityMint, wallet.publicKey]]
+        })
+      }
     }
   })
 }
