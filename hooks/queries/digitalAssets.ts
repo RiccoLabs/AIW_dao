@@ -278,14 +278,22 @@ function getHeliusEndpointSafe(network: 'devnet' | 'mainnet-beta'): string | nul
   return null
 }
 
+// somewhere shared
+type AppNetwork = 'devnet' | 'mainnet' | 'mainnet-beta'
+type HeliusNetwork = 'devnet' | 'mainnet-beta'
+
+const toHeliusNetwork = (n: AppNetwork): HeliusNetwork =>
+  n === 'mainnet' ? 'mainnet-beta' : n // devnet stays devnet
+
 export const dasByOwnerQueryFn = async (
-  network: 'devnet' | 'mainnet-beta',
+  network: AppNetwork,            // <— accept your app’s network type
   owner: PublicKey
 ): Promise<DasNftObject[]> => {
-  const url = getHeliusEndpointSafe(network)
+  const heliusNet = toHeliusNetwork(network)
+  const url = getHeliusEndpointSafe(heliusNet) // expects 'devnet' | 'mainnet-beta'
 
   if (!url) {
-    console.warn(`No Helius endpoint configured for ${network}. Skipping DAS query.`)
+    console.warn(`No Helius endpoint configured for ${heliusNet}. Skipping DAS query.`)
     return []
   }
 
