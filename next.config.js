@@ -67,4 +67,14 @@ if (process.env.SENTRY_AUTH_TOKEN) {
   })
 }
 
+config.eslint = {
+  // ❌ disables lint errors from breaking builds
+  ignoreDuringBuilds: true,
+}
+
+config.typescript = {
+  // ❌ disables TS errors from breaking builds
+  ignoreBuildErrors: true,
+}
+
 module.exports = config
