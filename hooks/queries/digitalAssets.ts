@@ -10,6 +10,8 @@ import axios from 'axios'
 import { BN } from '@coral-xyz/anchor'
 
 type Network = 'devnet' | 'mainnet'
+type HeliusNetwork = 'devnet' | 'mainnet-beta'
+
 const getHeliusEndpoint = (network: Network) => {
   const url =
     network === 'devnet'
@@ -17,10 +19,9 @@ const getHeliusEndpoint = (network: Network) => {
       : process.env.NEXT_PUBLIC_HELIUS_MAINNET_RPC
   if (url === undefined)
     throw new Error(
-      `Helius RPC endpoint not set in env: ${
-        network === 'devnet'
-          ? 'NEXT_PUBLIC_HELIUS_DEVNET_RPC'
-          : 'NEXT_PUBLIC_HELIUS_MAINNET_RPC'
+      `Helius RPC endpoint not set in env: ${network === 'devnet'
+        ? 'NEXT_PUBLIC_HELIUS_DEVNET_RPC'
+        : 'NEXT_PUBLIC_HELIUS_MAINNET_RPC'
       }`,
     )
   return url
@@ -278,14 +279,19 @@ function getHeliusEndpointSafe(network: 'devnet' | 'mainnet-beta'): string | nul
   return null
 }
 
+const toHeliusNetwork = (n: Network): HeliusNetwork =>
+  n === 'mainnet' ? 'mainnet-beta' : 'devnet'
+
+// ---- DAS fetcher: accept your app Network, map internally ----
 export const dasByOwnerQueryFn = async (
-  network: 'devnet' | 'mainnet-beta',
+  network: Network,         // app type
   owner: PublicKey
 ): Promise<DasNftObject[]> => {
-  const url = getHeliusEndpointSafe(network)
+  const heliusNet = toHeliusNetwork(network)
+  const url = getHeliusEndpointSafe(heliusNet)
 
   if (!url) {
-    console.warn(`No Helius endpoint configured for ${network}. Skipping DAS query.`)
+    console.warn(`No Helius endpoint for ${heliusNet}, skipping DAS query.`)
     return []
   }
 
@@ -354,14 +360,14 @@ export const useRaydiumAssetsByOwner = (owner: undefined | PublicKey) => {
       if (!enabled) throw new Error()
       const nfts = await dasByOwnerQueryFn(network, owner)
       const raydiumAssets = nfts.filter(
-        nft => 
-          nft.creators.length && 
+        nft =>
+          nft.creators.length &&
           nft.creators[0].address === raydiumCreator.toBase58() &&
           nft.creators[0].verified
       )
 
       return Promise.all(
-        raydiumAssets.map(async(x) => {
+        raydiumAssets.map(async (x) => {
           try {
             const uriData = await axios.get(x.content.json_uri)
             const mintA = uriData.data.poolInfo?.mintA?.symbol
@@ -380,11 +386,11 @@ export const useRaydiumAssetsByOwner = (owner: undefined | PublicKey) => {
               new BN(0)
 
             const id = x.id
-            
-            const name = 
-              typeof mintA === 'string' && 
-              typeof mintB === 'string' && 
-              typeof id === 'string' ?
+
+            const name =
+              typeof mintA === 'string' &&
+                typeof mintB === 'string' &&
+                typeof id === 'string' ?
                 `${mintB}-${mintA} (${id})` :
                 undefined
 
@@ -411,7 +417,7 @@ export const useRaydiumAssetsByOwner = (owner: undefined | PublicKey) => {
             }
           }
         }
-      ))
+        ))
     },
   })
 }
